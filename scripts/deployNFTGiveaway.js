@@ -16,6 +16,7 @@ const deploy = async function () {
     const txReceipt = await awesomeNFT
         .deploymentTransaction()
         .wait(networkConfig[network.config.chainId]?.blockConfirmations ?? 1);
+    console.log("Done Deploying");
 };
 
 deploy().catch((error) => console.log(error));
