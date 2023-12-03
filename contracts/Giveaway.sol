@@ -2,20 +2,28 @@
 
 pragma solidity ^0.8.19;
 
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+error Giveaway__NotAValidAddress();
+error Giveaway__AlreadyJoined();
 
 contract Giveaway {
-    address public winner;
-    AggregatorV3Interface internal ETHUSDpriceFeed;
+    uint256 public participantCount = 0;
+    mapping(address => bool) private participants;
+    address private winner;
 
-    constructor(address ETHUSDpriceFeedAggregatorAddress) {
-        ETHUSDpriceFeed = AggregatorV3Interface(ETHUSDpriceFeedAggregatorAddress);
+    function enterGiveaway() public {
+        if (isParticipant(msg.sender)) revert Giveaway__AlreadyJoined();
+
+        participants[msg.sender] = true;
+        participantCount++;
     }
 
-    function enterGiveaway() public payable {}
+    function isParticipant(address participant) public view returns (bool) {
+        if (participant != address(0)) revert Giveaway__NotAValidAddress();
 
-    function getLatestETHUSDpriceFeed() internal view returns (int256) {
-        (, int256 answer, , , ) = ETHUSDpriceFeed.latestRoundData();
-        return answer;
+        return participants[participant];
+    }
+
+    function getWinner() public view returns (address) {
+        return winner;
     }
 }
