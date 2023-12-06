@@ -10,7 +10,9 @@ let PRIVATE_ACCOUNT_2 = process.env.PRIVATE_ACCOUNT_2;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-    solidity: "0.8.20",
+    solidity: {
+        version: "0.8.20",
+    },
     defaultNetwork: "hardhat",
     networks: {
         localhost: {
