@@ -1,6 +1,6 @@
 const { run } = require("hardhat");
 
-module.exports = async (contractAddress, constructorArgs = []) => {
+const verify = async (contractAddress, constructorArgs = []) => {
     try {
         await run("verify:verify", {
             address: contractAddress,
@@ -12,3 +12,5 @@ module.exports = async (contractAddress, constructorArgs = []) => {
         else console.log(error);
     }
 };
+
+module.exports = verify;
