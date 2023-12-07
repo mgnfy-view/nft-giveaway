@@ -42,6 +42,8 @@ const deployGiveaway = async function (nftAddress) {
         .wait(networkConfig[network.config.chainId]?.blockConfirmations ?? 1);
     console.log("Done Deploying");
 
+    await vrfCoordinatorV2Mock.addConsumer(subscriptionId, await giveaway.getAddress());
+
     if (!isDevelopmentChain && process.env.ETHERSCAN_API_KEY) {
         await verify(await giveaway.getAddress());
     }
