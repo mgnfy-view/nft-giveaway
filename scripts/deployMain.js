@@ -18,8 +18,10 @@ const deployMain = async function () {
 
     nft.transferOwnership(await giveaway.getAddress());
 
-    if (isDevelopmentChain) return { nft, giveaway, VRFCoordinatorV2Mock };
-    else return { nft, giveaway };
+    if (isDevelopmentChain) return { nft, giveaway, VRFCoordinatorV2Mock, user0, user1 };
+    else return { nft, giveaway, user0, user1 };
 };
 
 deployMain().catch((error) => console.log(error));
+
+module.exports = deployMain;
