@@ -2,9 +2,9 @@ const { ethers, network } = require("hardhat");
 const { developmentChainIds, networkConfig } = require("../helper.config.js");
 
 const deployMocks = async function () {
-    const [user0, user1] = await ethers.getSigners();
-    const BASE_FEE = ethers.parseEther("0.25");
-    const GAS_PRICE_LINK = "1000000000";
+    const [user0] = await ethers.getSigners();
+    const BASE_FEE = ethers.parseEther("0.25"); // the premium field value taken from that of sepolia testnet
+    const GAS_PRICE_LINK = "10000000"; // arbitrary link per gas price
 
     const vrfCoordinatorV2Mock = await ethers.deployContract("VRFCoordinatorV2Mock", [BASE_FEE, GAS_PRICE_LINK], user0);
     await vrfCoordinatorV2Mock.waitForDeployment();

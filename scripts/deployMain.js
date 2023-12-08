@@ -1,25 +1,20 @@
 const { ethers, network } = require("hardhat");
 const { developmentChainIds, networkConfig } = require("../helper.config.js");
-const deployNFT = require("./deployNFT.js");
 const deployGiveaway = require("./deployGiveaway.js");
 
 const deployMain = async function () {
     const isDevelopmentChain = developmentChainIds.includes(network.config.chainId);
     const [user0, user1] = await ethers.getSigners();
-    let nft, giveaway, VRFCoordinatorV2Mock;
+    let giveaway, vrfCoordinatorV2Mock;
 
-    nft = await deployNFT();
     if (isDevelopmentChain) {
-        ({ giveaway, VRFCoordinatorV2Mock } = await deployGiveaway(await nft.getAddress()));
+        ({ giveaway, vrfCoordinatorV2Mock } = await deployGiveaway());
     } else {
-        ({ giveaway } = await deployGiveaway(await nft.getAddress()));
-        return { nft, giveaway };
+        ({ giveaway } = await deployGiveaway());
     }
 
-    nft.transferOwnership(await giveaway.getAddress());
-
-    if (isDevelopmentChain) return { nft, giveaway, VRFCoordinatorV2Mock, user0, user1 };
-    else return { nft, giveaway, user0, user1 };
+    if (isDevelopmentChain) return { giveaway, vrfCoordinatorV2Mock, user0, user1 };
+    else return { giveaway, user0, user1 };
 };
 
 deployMain().catch((error) => console.log(error));
