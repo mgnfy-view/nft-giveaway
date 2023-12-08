@@ -36,4 +36,7 @@ module.exports = {
         clear: true, //clears the content of the ouptut directory (in this  case, ./docs before generating new docs)
         runOnCompile: false,
     },
+    mocha: {
+        timeout: 200000, //200 seconds
+    },
 };
