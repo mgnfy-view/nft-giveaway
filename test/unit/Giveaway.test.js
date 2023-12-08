@@ -1,3 +1,4 @@
+const { network, ethers } = require("hardhat");
 const { loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const { assert, expect } = require("chai");
 const deployMain = require("../../scripts/deployMain.js");
@@ -5,10 +6,10 @@ const { developmentChainIds, networkConfig } = require("../../helper.config.js")
 
 developmentChainIds.includes(network.config.chainId)
     ? describe("Giveaway", function () {
-          let nft, giveaway, vrfCoordinatorV2Mock, user0, user1;
+          let giveaway, vrfCoordinatorV2Mock, user0, user1;
 
           beforeEach(async function () {
-              ({ nft, giveaway, vrfCoordinatorV2Mock, user0, user1 } = await loadFixture(deployMain));
+              ({ giveaway, vrfCoordinatorV2Mock, user0, user1 } = await loadFixture(deployMain));
           });
 
           describe("Initialization check", function () {
@@ -36,14 +37,14 @@ developmentChainIds.includes(network.config.chainId)
                   assert.strictEqual(participantCount.toString(), "0");
               });
 
-              it("the nft address must be correctly set", async function () {
-                  const nftAddress = await giveaway.getNFTAddress();
+              it("the nft metadata uri string must be equal to what was set in the .env", async function () {
+                  const nftMetadataUri = await giveaway.getNFTMetadataUri();
 
-                  assert.strictEqual(nftAddress.toString(), await nft.getAddress());
+                  assert.isTrue(nftMetadataUri.includes(process.env.NFT_METADATA_HASH));
               });
           });
 
-          describe.only("Entering the giveaway", function () {
+          describe("Entering the giveaway", function () {
               it("entering the giveaway must increase the participant count by 1", async function () {
                   await giveaway.connect(user1).enterGiveaway();
                   const participantCount = await giveaway.getParticipantCount();
@@ -64,6 +65,103 @@ developmentChainIds.includes(network.config.chainId)
                   await giveaway.connect(user1).enterGiveaway(); // first entry
 
                   await expect(giveaway.connect(user1).enterGiveaway()).to.be.rejectedWith("Giveaway__AlreadyJoined"); // rejection on second entry
+              });
+          });
+
+          describe("Checking for upkeep", function () {
+              it("checkUpkeep must return false if not enough time has passed and there aren't sufficient participants", async function () {
+                  const upkeepNeeded = await giveaway.checkUpkeep("0x");
+
+                  assert.deepEqual(upkeepNeeded, [false, "0x"]);
+              });
+
+              it("checkUpkeep must return true if all the conditions are satisfied", async function () {
+                  await giveaway.connect(user1).enterGiveaway(); // sets hasPlayers to true
+                  await network.provider.request({
+                      method: "evm_increaseTime",
+                      params: [Number(networkConfig[31337].interval)],
+                  });
+                  await network.provider.request({
+                      method: "evm_mine",
+                      params: [],
+                  });
+                  const upkeepNeeded = await giveaway.checkUpkeep("0x");
+
+                  assert.deepEqual(upkeepNeeded, [true, "0x"]);
+              });
+          });
+
+          describe("Performing upkeep/requesting a random word", function () {
+              it("performing upkeep should be reverted if checkUpkeep returns false", async function () {
+                  await expect(giveaway.performUpkeep("0x")).to.be.rejectedWith("Giveaway__UpkeepNotNeeded()");
+              });
+
+              it("the giveaway state must change to SELECTING_WINNER, indicated by 1 when upkeep is performed", async function () {
+                  await giveaway.connect(user1).enterGiveaway(); // sets hasPlayers to true
+                  await network.provider.request({
+                      method: "evm_increaseTime",
+                      params: [Number(networkConfig[31337].interval) + 1],
+                  });
+                  await network.provider.request({
+                      method: "evm_mine",
+                      params: [],
+                  });
+                  await giveaway.performUpkeep("0x");
+                  const giveawayState = await giveaway.getGiveawayState();
+
+                  assert.strictEqual(giveawayState.toString(), "1");
+              });
+
+              it("the requestId must be added to the vrfRequest object", async function () {
+                  await giveaway.connect(user1).enterGiveaway(); // sets hasPlayers to true
+                  await network.provider.request({
+                      method: "evm_increaseTime",
+                      params: [Number(networkConfig[31337].interval)],
+                  });
+                  await network.provider.request({
+                      method: "evm_mine",
+                      params: [],
+                  });
+                  await giveaway.performUpkeep("0x");
+                  const vrfRequest = await giveaway.getVRFRequestDetails();
+
+                  assert.isAbove(Number(vrfRequest[0]), 0);
+              });
+
+              it("the random word must be supplied, the winner picked, and he random word stord in the vrfRequest struct", async function () {
+                  await giveaway.connect(user1).enterGiveaway(); // sets hasPlayers to true
+                  await network.provider.request({
+                      method: "evm_increaseTime",
+                      params: [Number(networkConfig[31337].interval + 1)],
+                  });
+                  await network.provider.request({
+                      method: "evm_mine",
+                      params: [],
+                  });
+
+                  await new Promise(async function (resolve, reject) {
+                      giveaway.once("GiveawayWinnerSelected", async function () {
+                          try {
+                              const giveawayState = await giveaway.getGiveawayState();
+                              const winner = await giveaway.getWinner();
+                              const vrfRequestDetails = await giveaway.getVRFRequestDetails();
+
+                              assert.strictEqual(winner.toString(), user1.address);
+                              assert.strictEqual(giveawayState.toString(), "2");
+                              assert.isAbove(Number(vrfRequestDetails[1]), 0);
+                              resolve();
+                          } catch (error) {
+                              reject(error);
+                          }
+                      });
+
+                      try {
+                          await giveaway.performUpkeep("0x");
+                          await vrfCoordinatorV2Mock.fulfillRandomWords("1", await giveaway.getAddress());
+                      } catch (error) {
+                          reject(error);
+                      }
+                  });
               });
           });
       })
