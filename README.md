@@ -87,6 +87,7 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 -   ![Hardhat][hardhat-url]
 -   ![JavaScript][javascript-url]
+-   ![Solidity](https://img.shields.io/badge/-solidity-363636?logo=solidity&logoColor=white&style=for-the-badge)
 -   ![Ethereum](https://img.shields.io/badge/-ethereum-3C3C3D?logo=ethereum&logoColor=white&style=for-the-badge)
 -   ![npm](https://img.shields.io/badge/-npm-CB3837?logo=npm&logoColor=white&style=for-the-badge)
 
