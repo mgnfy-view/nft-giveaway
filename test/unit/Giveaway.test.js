@@ -1,15 +1,15 @@
 const { network, ethers } = require("hardhat");
-const { loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const { assert, expect } = require("chai");
-const deployMain = require("../../scripts/deployMain.js");
 const { developmentChainIds, networkConfig } = require("../../helper.config.js");
+const { loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
+const deployMain = require("../../scripts/deployMain.js");
 
 developmentChainIds.includes(network.config.chainId)
-    ? describe("Giveaway", function () {
-          let giveaway, vrfCoordinatorV2Mock, user0, user1;
+    ? describe("Giveaway unit testing", function () {
+          let giveaway, vrfCoordinatorV2Mock, user0, user1, user2;
 
           beforeEach(async function () {
-              ({ giveaway, vrfCoordinatorV2Mock, user0, user1 } = await loadFixture(deployMain));
+              ({ giveaway, vrfCoordinatorV2Mock, user0, user1, user2 } = await loadFixture(deployMain));
           });
 
           describe("Initialization check", function () {
@@ -92,11 +92,25 @@ developmentChainIds.includes(network.config.chainId)
           });
 
           describe("Performing upkeep/requesting a random word", function () {
-              it("performing upkeep should be reverted if checkUpkeep returns false", async function () {
+              it("if upkeep is not required, then performUpkeep must revert with Giveaway__UpkeepNotNeeded", async function () {
                   await expect(giveaway.performUpkeep("0x")).to.be.rejectedWith("Giveaway__UpkeepNotNeeded()");
               });
 
-              it("the giveaway state must change to SELECTING_WINNER, indicated by 1 when upkeep is performed", async function () {
+              it("the SelectingWinner event must be fired", async function () {
+                  await giveaway.connect(user1).enterGiveaway(); // sets hasPlayers to true
+                  await network.provider.request({
+                      method: "evm_increaseTime",
+                      params: [Number(networkConfig[31337].interval) + 1],
+                  });
+                  await network.provider.request({
+                      method: "evm_mine",
+                      params: [],
+                  });
+
+                  await expect(giveaway.performUpkeep("0x")).to.emit(giveaway, "SelectingWinner");
+              });
+
+              it("The giveaway state must change to SELECTING_WINNER, indicated by 1 when upkeep is performed", async function () {
                   await giveaway.connect(user1).enterGiveaway(); // sets hasPlayers to true
                   await network.provider.request({
                       method: "evm_increaseTime",
@@ -162,6 +176,22 @@ developmentChainIds.includes(network.config.chainId)
                           reject(error);
                       }
                   });
+              });
+          });
+
+          describe("Miscellaneous", function () {
+              it("The remaining time must be 5 seconds after 5 seconds have passed, since the interval set for local testing is 10 seconds", async function () {
+                  await network.provider.request({
+                      method: "evm_increaseTime",
+                      params: [Number(networkConfig[31337].interval - 5)],
+                  });
+                  await network.provider.request({
+                      method: "evm_mine",
+                      params: [],
+                  });
+                  const remainingTime = await giveaway.getRemainingTime();
+
+                  assert.isBelow(Number(remainingTime.toString()), 5); // accounting for time loss between requests
               });
           });
       })
