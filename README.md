@@ -155,6 +155,10 @@ npx hardhat run scripts/deploy.js --network <network-name>
 
 After deployment, get your giveaway's contract address (which will be logged in the terminal) and go to Chainlink's subscription manager and add your giveaway as the consumer. Only then can your contract receive a random number!
 
+You also need to add your giveaway contract for upkeep at [Chainlink automation](https://automation.chain.link/) service. This will allow your contract to pick a random winner by itself after the specified interval (Chainlink keepers call the performUpkeep function to pick a winner).
+
+That's it. The giveaway should be up and running, and people can join in! Wait to find out whose the winner!
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
