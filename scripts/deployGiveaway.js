@@ -57,7 +57,7 @@ const deployGiveaway = async function () {
         await vrfCoordinatorV2Mock.addConsumer(subscriptionId, await giveaway.getAddress()); // add our giveaway contract as the consumer
         return { giveaway, vrfCoordinatorV2Mock };
     } else {
-        if (process.env.ETHERSCAN_API_KEY) await verify(await giveaway.getAddress());
+        if (process.env.ETHERSCAN_API_KEY) await verify(await giveaway.getAddress(), constructorArgs);
         return giveaway;
     }
 };
