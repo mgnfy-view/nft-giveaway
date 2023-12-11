@@ -29,20 +29,19 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Sahil-Gujrati/nft-giveaway">
+  <!-- <a href="https://github.com/Sahil-Gujrati/nft-giveaway">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+  </a> -->
 
 <h3 align="center">NFT Giveaway</h3>
 
   <p align="center">
-    project_description
+    A giveaway smart contract where anyone can join to have a fair chance at winning an awesome NFT
     <br />
-    <a href="https://github.com/Sahil-Gujrati/nft-giveaway"><strong>Explore the docs »</strong></a>
+    <!-- <a href="https://github.com/Sahil-Gujrati/nft-giveaway"><strong>Explore the docs »</strong></a> -->
     <br />
     <br />
-    <a href="https://github.com/Sahil-Gujrati/nft-giveaway">View Demo</a>
-    ·
+    <!-- <a href="https://github.com/Sahil-Gujrati/nft-giveaway">View Demo</a> -->
     <a href="https://github.com/Sahil-Gujrati/nft-giveaway/issues">Report Bug</a>
     ·
     <a href="https://github.com/Sahil-Gujrati/nft-giveaway/issues">Request Feature</a>
@@ -66,7 +65,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <!-- <li><a href="#usage">Usage</a></li> -->
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -79,7 +78,13 @@
 
 ## About The Project
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `Sahil-Gujrati`, `nft-giveaway`, `twitter_handle`, `linkedin_username`, `gmail`, `sahilgujrati12`, `NFT Giveaway`, `project_description`
+Giveaways are a form of expression of love of creators/influencers towards their community and supporters. Hundreds of giveaways occur every month, and thousands of people join in to have a shot at getting a console, PC, movie tickets, a pair of those shining new sneakers and what not.
+
+Making the process of selecting a winner for the giveaway decentralized and devoid of any bias or tampering is a difficult task. That's where blockchain technology comes to the rescue! Using Chainlink's VRF service, which provides verifiable random numbers, we can pick a truly random winner. Everything is carried out on-chain with smart contracts - entering the giveaway, picking a winner, and even sending him/her the prize!
+
+When the winner is selected, an NFT (Non-Fungible Token) is minted to him/her. The NFT can be representative of physical assets - such as a pair of sneakers - and hold information about its current state in its metadata! The winner gets two prizes, first, his/her sneakers, and second, the NFT! The NFT can even be burnt after the winner gets the sneakers delivered to him/her, ensuring that the prize was claimed successfully. How cool!
+
+This project allows anyone to configure and create a giveaway of their own on EVM compatible chains. Though this project is well tested and documented, it hasn't been audited yet, so please don't deploy it on the mainnet! Keep your giveaways restricted to testnets only, if you intend to use this project.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -88,6 +93,7 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 -   ![Hardhat][hardhat-url]
 -   ![JavaScript][javascript-url]
 -   ![Solidity](https://img.shields.io/badge/-solidity-363636?logo=solidity&logoColor=white&style=for-the-badge)
+-   ![Ethereum](https://img.shields.io/badge/-ethereum-3C3C3D?logo=ethereum&logoColor=white&style=for-the-badge)
 -   ![npm](https://img.shields.io/badge/-npm-CB3837?logo=npm&logoColor=white&style=for-the-badge)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -96,45 +102,70 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-
--   npm
-    ```sh
-    npm install npm@latest -g
-    ```
+Make sure you have node.js and git installed and configured on your system.
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-    ```sh
-    git clone https://github.com/Sahil-Gujrati/nft-giveaway.git
+Clone this repository
+
+```shell
+git clone https://github.com/Sahil-Gujrati/nft-giveaway.git
+```
+
+Cd into the project folder and install the dependencies
+
+```shell
+npm install
+```
+
+You'll need a subscription to fund random number requests from Chainlink node operators, which is used to pick a random winner. Go to https://docs.chain.link/vrf/v2/subscription, read the docs, create your subscription and come back with your subscription ID.
+
+Depending on the testnet you want to deploy the giveaway to (I highly advise against deploying on mainnet), you'll also need the following (I'm using the Sepolia testnet here):
+
+-   Sepolia RPC URL: You can get this from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/)
+-   Private key for one of your accounts: Create your MetaMask wallet and get your private key from there
+-   Private key for another account: Optional
+-   NFT metadata hash: You'll need to upload your NFT metadata to IPFS and get its hash
+
+Set these values correctly in the `.env.template` file in the top level of the project, and rename the file to `.env`.
+
+You'll also need to configure the `helper.config.js` file. Make sure you have the testnet ID of the testnet you're deploying to (Again, I'm using Sepolia here):
+In the networkConfig object in `helper.config.js`, add the testnet ID as the key, and add the object containing configuration details as the value for the testnet ID key. You'll need:
+
+-   name: Name of the testnet
+-   blockConfirmations: The number of blocks you want to wait during deployment (6 is generally a good number)
+-   subscriptionID: Add your subscription ID here. Since you have it in your `.env` file, you can access it here as follows:
+    ```javascript
+    process.env.SUBSCRIPTION_ID;
     ```
-3. Install NPM packages
-    ```sh
-    npm install
-    ```
-4. Enter your API in `config.js`
-    ```js
-    const API_KEY = "ENTER YOUR API";
-    ```
+-   keyHash: The amount of gas you want to spend on each random word request
+-   vrfCoordinatorAddress: The address of Chainlink's VRFCoordinator for your preferred testnet
+-   callbackGasLimit: The maximum gas limit for fulfillRandomWords function
+-   interval: The time in seconds after which to pick a winner
+
+An example configuration for the Sepolia testnet (ID: 11155111) is given in the `helper.config.js` file. Don't forget to add your network configurations in `hardhat.config.js` file (again, configuration for the Sepolia testnet is provided). You can get more details about these values at [Chainlink docs](https://docs.chain.link/vrf).
+
+After you have added configurations to the `helper.config.js` and `hardhat.config.js` files, deploy the giveaway contract
+
+```shell
+npx hardhat run scripts/deploy.js --network <network-name>
+```
+
+After deployment, get your giveaway's contract address (which will be logged in the terminal) and go to Chainlink's subscription manager and add your giveaway as the consumer. Only then can your contract receive a random number!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 
-## Usage
+<!-- ## Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 <!-- ROADMAP -->
 
