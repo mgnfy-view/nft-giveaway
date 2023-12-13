@@ -1,6 +1,16 @@
 require("@nomicfoundation/hardhat-toolbox");
+const { task } = require("hardhat/config");
 require("hardhat-docgen");
 require("dotenv").config();
+
+const cleanup = require("./tasks/cleanup/cleanup.js");
+
+task(
+    "Cleanup",
+    "Remove giveaway from consumers, cancel subscription and withdraw any remaining LINK that the contract holds",
+)
+    .addParam("address", "The address of the deployed giveaway contract")
+    .setAction((taskArgs, hre) => cleanup(taskArgs, hre));
 
 let SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
 let REPORT_GAS = process.env.REPORT_GAS;
@@ -11,7 +21,11 @@ let PRIVATE_ACCOUNT_2 = process.env.PRIVATE_ACCOUNT_2;
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
     solidity: {
-        version: "0.8.20",
+        compilers: [
+            {
+                version: "0.8.20",
+            },
+        ],
     },
     defaultNetwork: "hardhat",
     networks: {
@@ -19,6 +33,7 @@ module.exports = {
             url: "http://127.0.0.1:8545/",
             chainId: 31337,
         },
+        // example configuration for the Sepolia testnet
         sepolia: {
             url: SEPOLIA_RPC_URL,
             accounts: [PRIVATE_ACCOUNT_1, PRIVATE_ACCOUNT_2],
