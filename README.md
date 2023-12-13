@@ -154,7 +154,11 @@ The contract will create a subscription and add itself as a consumer. The deploy
 
 That's it. The giveaway should be up and running, and people can join in! Wait to find out whose the winner!
 
-After the giveaway has ended, you can use the removeGiveawayFromConsumers(), cancelSubscription(), and withdraw() methods to clean up and claim the remaining LINK tokens.
+After the giveaway has ended, you can use the removeGiveawayFromConsumers(), cancelSubscription(), and withdraw() methods to clean up and claim the remaining LINK tokens. You can use the cleanup task for that:
+
+```shell
+npx hardhat Cleanup --address "YOUR_DEPLOYED_GIVEAWAY'S_ADDRESS" --network <network-name>
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
