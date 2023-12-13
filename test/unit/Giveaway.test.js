@@ -6,10 +6,10 @@ const deployMain = require("../../scripts/deployMain.js");
 
 developmentChainIds.includes(network.config.chainId)
     ? describe("Giveaway unit testing", function () {
-          let giveaway, vrfCoordinatorV2Mock, user0, user1, user2;
+          let giveaway, vrfCoordinatorV2Mock, user0, user1;
 
           beforeEach(async function () {
-              ({ giveaway, vrfCoordinatorV2Mock, user0, user1, user2 } = await loadFixture(deployMain));
+              ({ giveaway, vrfCoordinatorV2Mock, user0, user1 } = await loadFixture(deployMain));
           });
 
           describe("Initialization check", function () {
@@ -28,7 +28,7 @@ developmentChainIds.includes(network.config.chainId)
               it("the interval after which a winner is picked must be equal to the interval specified in the helper config", async function () {
                   const interval = await giveaway.getInterval();
 
-                  assert.strictEqual(interval.toString(), networkConfig[11155111].interval.toString()); // the keyHash, callbackGasLimit, and interval for local network is the same as that for the sepolia network
+                  assert.strictEqual(interval.toString(), networkConfig[network.config.chainId].interval.toString()); // the keyHash, callbackGasLimit, and interval for local network is the same as that for the sepolia network
               });
 
               it("the participant count must be zero", async function () {
