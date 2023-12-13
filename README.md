@@ -70,7 +70,6 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <!-- <li><a href="#acknowledgments">Acknowledgments</a></li> -->
   </ol>
 </details>
 
@@ -92,9 +91,9 @@ This project allows anyone to configure and create a giveaway of their own on EV
 
 -   ![Hardhat][hardhat-url]
 -   ![JavaScript][javascript-url]
--   ![Solidity](https://img.shields.io/badge/-solidity-363636?logo=solidity&logoColor=white&style=for-the-badge)
--   ![Ethereum](https://img.shields.io/badge/-ethereum-3C3C3D?logo=ethereum&logoColor=white&style=for-the-badge)
--   ![npm](https://img.shields.io/badge/-npm-CB3837?logo=npm&logoColor=white&style=for-the-badge)
+-   ![Solidity][solidity-url]
+-   ![Ethereum][ethereum-url]
+-   ![npm][npm-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -104,7 +103,7 @@ This project allows anyone to configure and create a giveaway of their own on EV
 
 ### Prerequisites
 
-Make sure you have node.js and git installed and configured on your system.
+Make sure you have node.js and git installed and configured on your system. Also, you need to have a MetaMask account (preferably two) with sufficient ETH, and LINK tokens. If you are using the Sepolia testnet, you can get Sepolia testnet ETH from [Alchemy](https://sepoliafaucet.com/) and LINK tokens from [Chainlink faucet](https://faucets.chain.link/).
 
 ### Installation
 
@@ -120,44 +119,42 @@ Cd into the project folder and install the dependencies
 npm install
 ```
 
-You'll need a subscription to fund random number requests from Chainlink node operators, which is used to pick a random winner. Go to https://docs.chain.link/vrf/v2/subscription, read the docs, create your subscription and come back with your subscription ID.
+Depending on the network you want to deploy the giveaway to (I highly advise against deploying on mainnet), you'll need the following values:
 
-Depending on the testnet you want to deploy the giveaway to (I highly advise against deploying on mainnet), you'll also need the following (I'm using the Sepolia testnet here):
-
--   Sepolia RPC URL: You can get this from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/)
+-   RPC URL: You can get this from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/) for any of your preferred testnet
 -   Private key for one of your accounts: Create your MetaMask wallet and get your private key from there
 -   Private key for another account: Optional
 -   NFT metadata hash: You'll need to upload your NFT metadata to IPFS and get its hash
 
-Set these values correctly in the `.env.template` file in the top level of the project, and rename the file to `.env`.
+Set these values correctly in the `.env.template` file in the top level of the project, and rename the file to `.env`, and bring them in your `hardhat.config.js` file. An example configuration for the Sepolia testnet is given in the same file.
 
-You'll also need to configure the `helper.config.js` file. Make sure you have the testnet ID of the testnet you're deploying to (Again, I'm using Sepolia here):
-In the networkConfig object in `helper.config.js`, add the testnet ID as the key, and add the object containing configuration details as the value for the testnet ID key. You'll need:
+You'll also need to configure the `helper.config.js` file. Make sure you have the ID of the testnet you're deploying to.
+In the networkConfig object in `helper.config.js`, add the testnet ID as the key, and add the object containing configuration details as the value for the testnet ID. You'll need:
 
 -   name: Name of the testnet
 -   blockConfirmations: The number of blocks you want to wait during deployment (6 is generally a good number)
--   subscriptionID: Add your subscription ID here. Since you have it in your `.env` file, you can access it here as follows:
-    ```javascript
-    process.env.SUBSCRIPTION_ID;
-    ```
 -   keyHash: The amount of gas you want to spend on each random word request
--   vrfCoordinatorAddress: The address of Chainlink's VRFCoordinator for your preferred testnet
 -   callbackGasLimit: The maximum gas limit for fulfillRandomWords function
 -   interval: The time in seconds after which to pick a winner
+-   vrfCoordinatorAddress: The address of Chainlink's VRFCoordinator for your preferred testnet
+-   linkTokenAddress: The address of the LINK token contract for your preferred document
+-   upkeepContractAddress: The address of the Chainlink registrar for your preferred network
+-   fundLinkAmountForSubscription: The amount of LINK tokens to fund the subscription ID dynamically created by the contract on deployment
+-   fundLinkAmountForUpkeep: The amount of LINK tokens to fund the upkeep
 
-An example configuration for the Sepolia testnet (ID: 11155111) is given in the `helper.config.js` file. Don't forget to add your network configurations in `hardhat.config.js` file (again, configuration for the Sepolia testnet is provided). You can get more details about these values at [Chainlink docs](https://docs.chain.link/vrf).
+An example configuration for the Sepolia testnet (ID: 11155111) is given in the `helper.config.js` file. You can get more details about these values at [Chainlink VRF docs](https://docs.chain.link/vrf) and [Chainlink Automation docs](https://docs.chain.link/chainlink-automation).
 
-After you have added configurations to the `helper.config.js` and `hardhat.config.js` files, deploy the giveaway contract
+After you have configured the `helper.config.js` and `hardhat.config.js` files, deploy the giveaway contract
 
 ```shell
 npx hardhat run scripts/deploy.js --network <network-name>
 ```
 
-After deployment, get your giveaway's contract address (which will be logged in the terminal) and go to Chainlink's subscription manager and add your giveaway as the consumer. Only then can your contract receive a random number!
-
-You also need to add your giveaway contract for upkeep at [Chainlink automation](https://automation.chain.link/) service. This will allow your contract to pick a random winner by itself after the specified interval (Chainlink keepers call the performUpkeep function to pick a winner).
+The contract will create a subscription and add itself as a consumer. The deployment script will fund the subscription and the upkeep. Sit back, relax, and watch.
 
 That's it. The giveaway should be up and running, and people can join in! Wait to find out whose the winner!
+
+After the giveaway has ended, you can use the removeGiveawayFromConsumers(), cancelSubscription(), and withdraw() methods to clean up and claim the remaining LINK tokens.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -177,8 +174,10 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 -   [x] Create the NFT smart Contract
 -   [x] Create the Giveaway smart Contract
+-   [x] Write deployment scripts
 -   [x] Carry out unit testing
--   [ ] Carry out staging tests
+-   [x] Write documentation and generate docs
+-   [x] Write a good README.md
 
 See the [open issues](https://github.com/Sahil-Gujrati/nft-giveaway/issues) for a full list of proposed features (and known issues).
 
@@ -219,16 +218,6 @@ Project Link: [https://github.com/Sahil-Gujrati/nft-giveaway](https://github.com
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- ACKNOWLEDGMENTS
-
-## Acknowledgments
-
--   []()
--   []()
--   []()
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
@@ -246,3 +235,6 @@ Project Link: [https://github.com/Sahil-Gujrati/nft-giveaway](https://github.com
 [linkedin-url]: https://linkedin.com/in/sahil-gujrati-125ab0284
 [hardhat-url]: https://img.shields.io/badge/-HARDHAT-%23323330.svg?style=for-the-badge&logo=data:image/png;base64,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
 [javascript-url]: https://img.shields.io/badge/Javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E
+[solidity-url]: https://img.shields.io/badge/-solidity-363636?logo=solidity&logoColor=white&style=for-the-badge
+[ethereum-url]: https://img.shields.io/badge/-ethereum-3C3C3D?logo=ethereum&logoColor=white&style=for-the-badge
+[npm-url]: https://img.shields.io/badge/-npm-CB3837?logo=npm&logoColor=white&style=for-the-badge
