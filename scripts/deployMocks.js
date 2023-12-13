@@ -19,7 +19,7 @@ const deployMocks = async function () {
         .wait(networkConfig[network.config.chainId]?.blockConfirmations ?? 1);
     console.log("Done Deploying");
 
-    return vrfCoordinatorV2Mock;
+    return { vrfCoordinatorV2Mock };
 };
 
 module.exports = deployMocks;
