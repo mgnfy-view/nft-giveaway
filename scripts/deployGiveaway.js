@@ -1,6 +1,7 @@
 const { ethers, network } = require("hardhat");
 const { developmentChainIds, networkConfig } = require("../helper.config.js");
 const verify = require("../utils/verify.js");
+const ERC20ABI = require("../utils/ERC20ABI.js");
 const deployMocks = require("./deployMocks.js");
 
 const deployGiveaway = async function () {
@@ -10,32 +11,13 @@ const deployGiveaway = async function () {
     let vrfCoordinatorV2Mock, vrfCoordinatorAddress;
     let upkeepContractAddress;
     let keyHash, callbackGasLimit, interval, linkTokenAddress;
-    const transferABI = [
-        {
-            name: "transfer",
-            type: "function",
-            inputs: [
-                {
-                    name: "_to",
-                    type: "address",
-                },
-                {
-                    type: "uint256",
-                    name: "_tokens",
-                },
-            ],
-            constant: false,
-            outputs: [],
-            payable: false,
-        },
-    ];
 
     if (isDevelopmentChain) {
         // creating the vrf subscription
         console.log("Development chain detected");
-        ({ vrfCoordinatorV2Mock, mockLinkToken } = await deployMocks());
+        ({ vrfCoordinatorV2Mock } = await deployMocks());
         vrfCoordinatorAddress = await vrfCoordinatorV2Mock.getAddress();
-        linkTokenAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789"; // for unit tsting, we really don't care about the LINK token contract address, here, I've pasted Sepolia's LINK token contract address
+        linkTokenAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789"; // for unit testing, we really don't care about the LINK token contract address, here, I've pasted Sepolia's LINK token contract address
         upkeepContractAddress = "0xb0E49c5D0d05cbc241d68c05BC5BA1d1B7B72976"; // again we do not care about the registrar's address for a local testing environemnt, I've used Sepolia's registrar's address here
         ({
             31337: { keyHash, callbackGasLimit, interval },
@@ -80,14 +62,14 @@ const deployGiveaway = async function () {
         );
         console.log("Subscription funded");
 
-        return { giveaway, vrfCoordinatorV2Mock, mockLinkToken };
+        return { giveaway, vrfCoordinatorV2Mock };
     } else {
         console.log(
             `Funding contract with ${
                 networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ?? ethers.parseEther("5")
             } LINK for the subscription`,
         );
-        const linkToken = new ethers.Contract(linkTokenAddress, transferABI, user0);
+        const linkToken = new ethers.Contract(linkTokenAddress, ERC20ABI, user0);
         await linkToken.transfer(
             await giveaway.getAddress(),
             networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ?? ethers.parseEther("5"),
@@ -133,7 +115,7 @@ const deployGiveaway = async function () {
         );
         console.log("registered for upkeep");
 
-        if (process.env.ETHERSCAN_API_KEY) await verify(await giveaway.getAddress(), constructorArgs);
+        // if (process.env.ETHERSCAN_API_KEY) await verify(await giveaway.getAddress(), constructorArgs);
 
         return giveaway;
     }
