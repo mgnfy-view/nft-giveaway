@@ -115,7 +115,7 @@ const deployGiveaway = async function () {
         );
         console.log("registered for upkeep");
 
-        // if (process.env.ETHERSCAN_API_KEY) await verify(await giveaway.getAddress(), constructorArgs);
+        if (process.env.ETHERSCAN_API_KEY) await verify(await giveaway.getAddress(), constructorArgs);
 
         return giveaway;
     }
