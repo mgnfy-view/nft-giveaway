@@ -42,6 +42,12 @@ developmentChainIds.includes(network.config.chainId)
 
                   assert.isTrue(nftMetadataUri.includes(process.env.NFT_METADATA_HASH));
               });
+
+              it("the subscripton ID must not be zero", async function () {
+                  const subscriptionId = await giveaway.getSubscriptionId();
+
+                  assert(Number(subscriptionId));
+              });
           });
 
           describe("Entering the giveaway", function () {
