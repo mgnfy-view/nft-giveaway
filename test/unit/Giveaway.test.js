@@ -193,6 +193,19 @@ developmentChainIds.includes(network.config.chainId)
 
                   assert.isBelow(Number(remainingTime.toString()), 5); // accounting for time loss between requests
               });
+
+              it("The giveaway owner's address must be the deployer's address", async function () {
+                  const giveawayOwner = await giveaway.getGiveawayOwner();
+
+                  assert.strictEqual(giveawayOwner, user0.address);
+              });
+
+              it("The NFT's address must be a vaild address, and not address 0", async function () {
+                  const prizeNFTAddress = await giveaway.getNFTAddress();
+                  console.log(Number(prizeNFTAddress));
+
+                  assert.isAbove(Number(prizeNFTAddress), 0);
+              });
           });
       })
     : describe.skip;
