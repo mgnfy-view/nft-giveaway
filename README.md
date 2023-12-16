@@ -39,14 +39,17 @@
     A giveaway smart contract where anyone can join to have a fair chance at winning an awesome NFT
     <br />
     <!-- <a href="https://github.com/Sahil-Gujrati/nft-giveaway"><strong>Explore the docs »</strong></a> -->
-    <br />
-    <br />
+    <!-- <br />
+    <br /> -->
     <!-- <a href="https://github.com/Sahil-Gujrati/nft-giveaway">View Demo</a> -->
     <a href="https://github.com/Sahil-Gujrati/nft-giveaway/issues">Report Bug</a>
     ·
     <a href="https://github.com/Sahil-Gujrati/nft-giveaway/issues">Request Feature</a>
+    
   </p>
 </div>
+
+<br />
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -121,26 +124,26 @@ npm install
 
 Depending on the network you want to deploy the giveaway to (I highly advise against deploying on mainnet), you'll need the following values:
 
--   RPC URL: You can get this from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/) for any of your preferred testnet
--   Private key for one of your accounts: Create your MetaMask wallet and get your private key from there
--   Private key for another account: Optional
--   NFT metadata hash: You'll need to upload your NFT metadata to IPFS and get its hash
+-   RPC URL: you can get this from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/) for any of your preferred testnet
+-   Private key for one of your accounts: create your MetaMask wallet and get your private key from there, this private key will be used to deploy the contract and fund it with LINK tokens. Ensure that it has enough ETH and LINK balance
+-   Private key for another account: optional
+-   NFT metadata hash: you'll need to upload your NFT metadata to IPFS and get its hash
 
 Set these values correctly in the `.env.template` file in the top level of the project, and rename the file to `.env`, and bring them in your `hardhat.config.js` file. An example configuration for the Sepolia testnet is given in the same file.
 
 You'll also need to configure the `helper.config.js` file. Make sure you have the ID of the testnet you're deploying to.
 In the networkConfig object in `helper.config.js`, add the testnet ID as the key, and add the object containing configuration details as the value for the testnet ID. You'll need:
 
--   name: Name of the testnet
--   blockConfirmations: The number of blocks you want to wait during deployment (6 is generally a good number)
--   keyHash: The amount of gas you want to spend on each random word request
--   callbackGasLimit: The maximum gas limit for fulfillRandomWords function
--   interval: The time in seconds after which to pick a winner
--   vrfCoordinatorAddress: The address of Chainlink's VRFCoordinator for your preferred testnet
--   linkTokenAddress: The address of the LINK token contract for your preferred document
--   upkeepContractAddress: The address of the Chainlink registrar for your preferred network
--   fundLinkAmountForSubscription: The amount of LINK tokens to fund the subscription ID dynamically created by the contract on deployment
--   fundLinkAmountForUpkeep: The amount of LINK tokens to fund the upkeep
+-   name: name of the testnet
+-   blockConfirmations: the number of blocks you want to wait during deployment (6 is generally a good number)
+-   keyHash: the amount of gas you want to spend on each random word request
+-   callbackGasLimit: the maximum gas limit for fulfillRandomWords function
+-   interval: the time in seconds after which to pick a winner
+-   vrfCoordinatorAddress: the address of Chainlink's VRFCoordinator for your preferred testnet
+-   linkTokenAddress: the address of the LINK token contract for your preferred document
+-   upkeepContractAddress: the address of the Chainlink registrar for your preferred network
+-   fundLinkAmountForSubscription: the amount of LINK tokens to fund the subscription ID dynamically created by the contract on deployment
+-   fundLinkAmountForUpkeep: the amount of LINK tokens to fund the upkeep
 
 An example configuration for the Sepolia testnet (ID: 11155111) is given in the `helper.config.js` file. You can get more details about these values at [Chainlink VRF docs](https://docs.chain.link/vrf) and [Chainlink Automation docs](https://docs.chain.link/chainlink-automation).
 
@@ -152,7 +155,7 @@ npx hardhat run scripts/deploy.js --network <network-name>
 
 The contract will create a subscription and add itself as a consumer. The deployment script will fund the subscription and the upkeep. Sit back, relax, and watch.
 
-That's it. The giveaway should be up and running, and people can join in! Wait to find out whose the winner!
+That's it. The giveaway should be up and running, and people can join in! Wait to find out who's the winner!
 
 After the giveaway has ended, you can use the removeGiveawayFromConsumers(), cancelSubscription(), and withdraw() methods to clean up and claim the remaining LINK tokens. You can use the cleanup task for that:
 
