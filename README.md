@@ -84,9 +84,11 @@ Giveaways are a form of expression of love of creators/influencers towards their
 
 Making the process of selecting a winner for the giveaway decentralized and devoid of any bias or tampering is a difficult task. That's where blockchain technology comes to the rescue! Using Chainlink's VRF service, which provides verifiable random numbers, we can pick a truly random winner. Everything is carried out on-chain with smart contracts - entering the giveaway, picking a winner, and even sending him/her the prize!
 
-When the winner is selected, an NFT (Non-Fungible Token) is minted to him/her. The NFT can be representative of physical assets - such as a pair of sneakers - and hold information about its current state in its metadata! The winner gets two prizes, first, his/her sneakers, and second, the NFT! The NFT can even be burnt after the winner gets the sneakers delivered to him/her, ensuring that the prize was claimed successfully. How cool!
+When the winner is selected, an NFT (Non-Fungible Token) is minted to him/her. The NFT can be representative of physical assets - such as a pair of sneakers - and hold information about its current state in its metadata! The winner gets two prizes, first, his/her sneakers, and second, the NFT! The NFT can even be burnt after the winner gets the sneakers delivered to him/her, ensuring that the prize was claimed successfully.
 
 This project allows anyone to configure and create a giveaway of their own on EVM compatible chains. Though this project is well tested and documented, it hasn't been audited yet, so please don't deploy it on the mainnet! Keep your giveaways restricted to testnets only, if you intend to use this project.
+
+If you want to see the full list of giveaway smart contract functions and their descriptions, navigate to `./docs/index.html`. Open the index.html page in a browser to view the documentation.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
