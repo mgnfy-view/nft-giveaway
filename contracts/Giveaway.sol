@@ -86,9 +86,9 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
 
     /**
      * @param _keyHash The gas lane key hash value, which is the maximum gas price you are willing to pay for a request in wei
-     * @param _callbackGasLimit the amount of gas we want to use when the random word is supplied to our contract and fulfillRandomWords function is called
+     * @param _callbackGasLimit The amount of gas we want to use when the random word is supplied to our contract and fulfillRandomWords function is called
      * @param _interval The amount of time in seconds after which to randomly pick a winner
-     * @param _vrfCoordinatorAddress the vrfCoordinator contract address that is used to make the request for a random word
+     * @param _vrfCoordinatorAddress The vrfCoordinator contract address that is used to make the request for a random word
      * @param _nftMetadataUri The ipfs uri that leads to the NFT metadata
      */
     constructor(
@@ -204,7 +204,7 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
 
     /**
      * @notice Cancels the subscription
-     * @dev sets the subscriptionId to 0
+     * @dev Sets the subscriptionId to 0
      */
     function cancelSubscription() external onlyOwner {
         vrfCoordinator.cancelSubscription(subscriptionId, giveawayOwner);
@@ -259,8 +259,7 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     }
 
     /**
-     * @notice Gets the address of the deployer of the giveaway
-     * @return The giveaway owner's address
+     * @return The giveaway owner's (deployer's) address
      */
     function getGiveawayOwner() public view returns (address) {
         return giveawayOwner;
@@ -276,7 +275,6 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     }
 
     /**
-     * @notice Gets the number of participants in the giveaway
      * @return participantCount The number of giveaway participants
      */
     function getParticipantCount() public view returns (uint256) {
@@ -297,7 +295,7 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     /**
      * @dev Gets the address of a participant at the specified index in the participants array
      * @param index The index at which the participant address is stores
-     * @return The participant's address
+     * @return the Participant's address
      */
     function getParticipant(uint256 index) public view returns (address) {
         if (index < 0 || index > participantCount - 1) revert Giveaway__IndexOutOfBounds();
@@ -305,15 +303,13 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     }
 
     /**
-     * @notice Gets the address of the prize NFT
-     * @return The address of the prize NFT
+     * @return prizeNFTAddress The address of the prize NFT
      */
     function getNFTAddress() public view returns (address) {
         return address(prizeNFT);
     }
 
     /**
-     * @notice Gets the NFT metadata URI
      * @return nftMetadatUri The NFT metadata URI
      */
     function getNFTMetadataUri() public view returns (string memory) {
@@ -330,15 +326,13 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     }
 
     /**
-     * @notice Tells the amount of time remaining before the giveaway's winner is selected
-     * @return Returns the time remaining before a winner is picked
+     * @return remainingTime The time remaining before a winner is picked
      */
     function getRemainingTime() public view returns (uint256) {
         return interval - (block.timestamp - lastTimeStamp);
     }
 
     /**
-     * @notice Gets the interval after which the winner is to be picked
      * @return interval The interval (in seconds) after which the giveaway's winner will be selected
      */
     function getInterval() public view returns (uint256) {
@@ -346,24 +340,21 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     }
 
     /**
-     * @notice Gets the subscription ID this contract uses for funding VRF requests
-     * @return The uint64 subscription ID
+     * @return subscriptionId The subscription ID this contract uses for funding VRF requests
      */
     function getSubscriptionId() public view returns (uint256) {
         return subscriptionId;
     }
 
     /**
-     * @dev Returns the details of the VRF request that was made to get the random number for winner selection
-     * @return Returns a VRFRequest struct containing the requestId and the random number
+     * @return vrfrequest A How cool! VRFRequest struct containing the requestId and the random number
      */
     function getVRFRequestDetails() public view returns (VRFRequest memory) {
         return vrfRequest;
     }
 
     /**
-     * @notice Gets the upkeep ID
-     * @return The upkeep ID that was given to this contract on registering for upkeep
+     * @return upkeepId The upkeep ID that was given to this contract on registering for upkeep
      */
     function getUpkeepId() public view returns (uint256) {
         return upkeepId;
