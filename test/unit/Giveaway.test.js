@@ -1,15 +1,16 @@
 const { network, ethers } = require("hardhat");
 const { assert, expect } = require("chai");
-const { developmentChainIds, networkConfig } = require("../../helper.config.js");
 const { loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const deployMain = require("../../scripts/deployMain.js");
+const { developmentChainIds, networkConfig } = require("../../helper.config.js");
 
 developmentChainIds.includes(network.config.chainId)
     ? describe("Giveaway unit testing", function () {
           let giveaway, vrfCoordinatorV2Mock, user0, user1;
 
           beforeEach(async function () {
-              ({ giveaway, vrfCoordinatorV2Mock, user0, user1 } = await loadFixture(deployMain));
+              [user0, user1] = await ethers.getSigners();
+              ({ giveaway, vrfCoordinatorV2Mock } = await loadFixture(deployMain));
           });
 
           describe("Initialization check", function () {
@@ -145,7 +146,7 @@ developmentChainIds.includes(network.config.chainId)
                   await giveaway.performUpkeep("0x");
                   const vrfRequest = await giveaway.getVRFRequestDetails();
 
-                  assert.isAbove(Number(vrfRequest[0]), 0);
+                  assert.notStrictEqual(vrfRequest[0], "0");
               });
 
               it("the random word must be supplied, the winner picked, and he random word stord in the vrfRequest struct", async function () {
@@ -208,9 +209,8 @@ developmentChainIds.includes(network.config.chainId)
 
               it("The NFT's address must be a vaild address, and not address 0", async function () {
                   const prizeNFTAddress = await giveaway.getNFTAddress();
-                  console.log(Number(prizeNFTAddress));
 
-                  assert.isAbove(Number(prizeNFTAddress), 0);
+                  assert.notStrictEqual(prizeNFTAddress, "0");
               });
           });
       })

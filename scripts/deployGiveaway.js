@@ -1,8 +1,8 @@
 const { ethers, network } = require("hardhat");
 const { developmentChainIds, networkConfig } = require("../helper.config.js");
+const deployMocks = require("./deployMocks.js");
 const verify = require("../utils/verify.js");
 const ERC20ABI = require("../utils/ERC20ABI.js");
-const deployMocks = require("./deployMocks.js");
 
 const deployGiveaway = async function () {
     const isDevelopmentChain = developmentChainIds.includes(network.config.chainId);
@@ -17,19 +17,15 @@ const deployGiveaway = async function () {
         console.log("Development chain detected");
         ({ vrfCoordinatorV2Mock } = await deployMocks());
         vrfCoordinatorAddress = await vrfCoordinatorV2Mock.getAddress();
-        linkTokenAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789"; // for unit testing, we really don't care about the LINK token contract address, here, I've pasted Sepolia's LINK token contract address
+        linkTokenAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789"; // for unit testing, we really don't care about the LINK token contract address. Here, I've pasted Sepolia's LINK token contract address
         upkeepContractAddress = "0xb0E49c5D0d05cbc241d68c05BC5BA1d1B7B72976"; // again we do not care about the registrar's address for a local testing environemnt, I've used Sepolia's registrar's address here
         ({
             31337: { keyHash, callbackGasLimit, interval },
         } = networkConfig);
     } else {
         const chainId = network.config.chainId;
-        keyHash = networkConfig[chainId].keyHash;
-        callbackGasLimit = networkConfig[chainId].callbackGasLimit;
-        interval = networkConfig[chainId].interval;
-        vrfCoordinatorAddress = networkConfig[chainId].vrfCoordinatorAddress;
-        linkTokenAddress = networkConfig[chainId].linkTokenAddress;
-        upkeepContractAddress = networkConfig[chainId].upkeepContractAddress;
+        ({ keyHash, callbackGasLimit, interval, vrfCoordinatorAddress, linkTokenAddress, upkeepContractAddress } =
+            networkConfig[chainId]);
     }
     const constructorArgs = [
         keyHash,
