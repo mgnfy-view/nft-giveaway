@@ -1,20 +1,20 @@
 const { ethers, network } = require("hardhat");
-const { developmentChainIds, networkConfig } = require("../helper.config.js");
 const deployGiveaway = require("./deployGiveaway.js");
+const { developmentChainIds, networkConfig } = require("../helper.config.js");
 
 const deployMain = async function () {
     const isDevelopmentChain = developmentChainIds.includes(network.config.chainId);
-    const [user0, user1] = await ethers.getSigners();
+    const [user0] = await ethers.getSigners();
     let giveaway, vrfCoordinatorV2Mock;
 
     if (isDevelopmentChain) {
         ({ giveaway, vrfCoordinatorV2Mock } = await deployGiveaway());
 
-        return { giveaway, vrfCoordinatorV2Mock, user0, user1 };
+        return { giveaway, vrfCoordinatorV2Mock };
     } else {
         giveaway = await deployGiveaway();
 
-        return { giveaway, user0, user1 };
+        return { giveaway };
     }
 };
 
