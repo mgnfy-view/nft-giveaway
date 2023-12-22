@@ -111,7 +111,10 @@ const deployGiveaway = async function () {
         );
         console.log("registered for upkeep");
 
-        if (process.env.ETHERSCAN_API_KEY) await verify(await giveaway.getAddress(), constructorArgs);
+        if (process.env.ETHERSCAN_API_KEY) {
+            await verify(await giveaway.getAddress(), constructorArgs);
+            await verify(await giveaway.getNFTAddress(), [`https://ipfs.io/ipfs/${NFT_METADATA_HASH}`]);
+        }
 
         return giveaway;
     }
