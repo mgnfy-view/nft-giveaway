@@ -12,11 +12,12 @@ task(
     .addParam("address", "The address of the deployed giveaway contract")
     .setAction((taskArgs, hre) => cleanup(taskArgs, hre));
 
-let SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
-let REPORT_GAS = process.env.REPORT_GAS;
-let ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
-let PRIVATE_ACCOUNT_1 = process.env.PRIVATE_ACCOUNT_1;
-let PRIVATE_ACCOUNT_2 = process.env.PRIVATE_ACCOUNT_2;
+const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
+const REPORT_GAS = process.env.REPORT_GAS;
+const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY;
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
+const PRIVATE_ACCOUNT_1 = process.env.PRIVATE_ACCOUNT_1;
+const PRIVATE_ACCOUNT_2 = process.env.PRIVATE_ACCOUNT_2;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -41,7 +42,12 @@ module.exports = {
         },
     },
     gasReporter: {
+        coinmarketcap: COINMARKETCAP_API_KEY,
         enabled: REPORT_GAS || false,
+        outputFile: "gasReport.txt",
+        currency: "USD",
+        showTimeSpent: true,
+        noColors: true,
     },
     etherscan: {
         apiKey: ETHERSCAN_API_KEY,
