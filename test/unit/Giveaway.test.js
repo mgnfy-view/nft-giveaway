@@ -13,53 +13,65 @@ developmentChainIds.includes(network.config.chainId)
               ({ giveaway, vrfCoordinatorV2Mock } = await loadFixture(deployMain));
           });
 
-          describe("Initialization check", function () {
-              it("the giveaway must be in an open state, indicated by 0", async function () {
+          describe("Giveaway initialization", function () {
+              it("sets the giveaway owner's address to the deployer's address", async function () {
+                  const giveawayOwner = await giveaway.getGiveawayOwner();
+
+                  assert.strictEqual(giveawayOwner, user0.address);
+              });
+
+              it("sets the NFT's address to a vaild address, and not address 0", async function () {
+                  const prizeNFTAddress = await giveaway.getNFTAddress();
+
+                  assert.notStrictEqual(prizeNFTAddress, "0x0000000000000000000000000000000000000000");
+              });
+
+              it("sets the giveaway in open state, indicated by 0", async function () {
                   const giveawayState = await giveaway.getGiveawayState();
 
                   assert.strictEqual(giveawayState.toString(), "0");
               });
 
-              it("the recent winner must be address 0 (no winner)", async function () {
+              it("sets the recent winner's address to 0 (indicating no winner)", async function () {
                   const recentWinner = await giveaway.getWinner();
 
                   assert.strictEqual(recentWinner.toString(), "0x0000000000000000000000000000000000000000");
               });
 
-              it("the interval after which a winner is picked must be equal to the interval specified in the helper config", async function () {
+              it("sets the interval after which to pick a winner equal to the interval specified in the helper config", async function () {
                   const interval = await giveaway.getInterval();
 
                   assert.strictEqual(interval.toString(), networkConfig[network.config.chainId].interval.toString()); // the keyHash, callbackGasLimit, and interval for local network is the same as that for the sepolia network
               });
 
-              it("the participant count must be zero", async function () {
+              it("sets the participant count to 0", async function () {
                   const participantCount = await giveaway.getParticipantCount();
 
                   assert.strictEqual(participantCount.toString(), "0");
               });
 
-              it("the nft metadata uri string must be equal to what was set in the .env", async function () {
+              it("sets the NFT metadata uri string to what was set in the .env", async function () {
                   const nftMetadataUri = await giveaway.getNFTMetadataUri();
 
                   assert.isTrue(nftMetadataUri.includes(process.env.NFT_METADATA_HASH));
               });
 
-              it("the subscripton ID must not be zero", async function () {
+              it("sets the subscripton ID to 1", async function () {
                   const subscriptionId = await giveaway.getSubscriptionId();
 
-                  assert(Number(subscriptionId));
+                  assert.strictEqual(subscriptionId, "1");
               });
           });
 
           describe("Entering the giveaway", function () {
-              it("entering the giveaway must increase the participant count by 1", async function () {
+              it("increases the participant count by 1", async function () {
                   await giveaway.connect(user1).enterGiveaway();
                   const participantCount = await giveaway.getParticipantCount();
 
                   assert.strictEqual(participantCount.toString(), "1");
               });
 
-              it("the participant must be registered in the contract", async function () {
+              it("registers the participant in the contract", async function () {
                   await giveaway.connect(user1).enterGiveaway();
                   const isParticipant = await giveaway.isParticipant(user1.address);
                   const participant = await giveaway.getParticipant(0);
@@ -68,7 +80,7 @@ developmentChainIds.includes(network.config.chainId)
                   assert.strictEqual(participant, user1.address);
               });
 
-              it("trying to rejoin the giveaway will result in an error", async function () {
+              it("throws an error if the same participant tries to rejoin", async function () {
                   await giveaway.connect(user1).enterGiveaway(); // first entry
 
                   await expect(giveaway.connect(user1).enterGiveaway()).to.be.rejectedWith("Giveaway__AlreadyJoined"); // rejection on second entry
@@ -76,13 +88,13 @@ developmentChainIds.includes(network.config.chainId)
           });
 
           describe("Checking for upkeep", function () {
-              it("checkUpkeep must return false if not enough time has passed and there aren't sufficient participants", async function () {
+              it("returns false if not enough time has passed and there aren't sufficient participants", async function () {
                   const upkeepNeeded = await giveaway.checkUpkeep("0x");
 
                   assert.deepEqual(upkeepNeeded, [false, "0x"]);
               });
 
-              it("checkUpkeep must return true if all the conditions are satisfied", async function () {
+              it("returns true if all the conditions are satisfied", async function () {
                   await giveaway.connect(user1).enterGiveaway(); // sets hasPlayers to true
                   await network.provider.request({
                       method: "evm_increaseTime",
@@ -99,11 +111,11 @@ developmentChainIds.includes(network.config.chainId)
           });
 
           describe("Performing upkeep/requesting a random word", function () {
-              it("if upkeep is not required, then performUpkeep must revert with Giveaway__UpkeepNotNeeded", async function () {
+              it("reverts with Giveaway__UpkeepNotNeeded if upkeep is not required", async function () {
                   await expect(giveaway.performUpkeep("0x")).to.be.rejectedWith("Giveaway__UpkeepNotNeeded()");
               });
 
-              it("the SelectingWinner event must be fired", async function () {
+              it("fires the SelectingWinner event", async function () {
                   await giveaway.connect(user1).enterGiveaway(); // sets hasPlayers to true
                   await network.provider.request({
                       method: "evm_increaseTime",
@@ -117,7 +129,7 @@ developmentChainIds.includes(network.config.chainId)
                   await expect(giveaway.performUpkeep("0x")).to.emit(giveaway, "SelectingWinner");
               });
 
-              it("The giveaway state must change to SELECTING_WINNER, indicated by 1 when upkeep is performed", async function () {
+              it("changes the giveaway state to SELECTING_WINNER, indicated by 1 when upkeep is performed", async function () {
                   await giveaway.connect(user1).enterGiveaway(); // sets hasPlayers to true
                   await network.provider.request({
                       method: "evm_increaseTime",
@@ -133,7 +145,7 @@ developmentChainIds.includes(network.config.chainId)
                   assert.strictEqual(giveawayState.toString(), "1");
               });
 
-              it("the requestId must be added to the vrfRequest object", async function () {
+              it("adds the requestId to the vrfRequest object", async function () {
                   await giveaway.connect(user1).enterGiveaway(); // sets hasPlayers to true
                   await network.provider.request({
                       method: "evm_increaseTime",
@@ -146,10 +158,10 @@ developmentChainIds.includes(network.config.chainId)
                   await giveaway.performUpkeep("0x");
                   const vrfRequest = await giveaway.getVRFRequestDetails();
 
-                  assert.notStrictEqual(vrfRequest[0], "0");
+                  assert.notStrictEqual(vrfRequest[0].toString, "0");
               });
 
-              it("the random word must be supplied, the winner picked, and he random word stord in the vrfRequest struct", async function () {
+              it("supplies the random word, picks the winner, and stores the random word in the vrfRequest struct", async function () {
                   await giveaway.connect(user1).enterGiveaway(); // sets hasPlayers to true
                   await network.provider.request({
                       method: "evm_increaseTime",
@@ -186,8 +198,8 @@ developmentChainIds.includes(network.config.chainId)
               });
           });
 
-          describe("Miscellaneous", function () {
-              it("The remaining time must be 5 seconds after 5 seconds have passed, since the interval set for local testing is 10 seconds", async function () {
+          describe("Miscellaneous functions", function () {
+              it("the remaining time must be 5 seconds after 5 seconds have passed, since tinhe interval set for local testing is 10 seconds", async function () {
                   await network.provider.request({
                       method: "evm_increaseTime",
                       params: [Number(networkConfig[31337].interval - 5)],
@@ -199,18 +211,6 @@ developmentChainIds.includes(network.config.chainId)
                   const remainingTime = await giveaway.getRemainingTime();
 
                   assert.isBelow(Number(remainingTime.toString()), 5); // accounting for time loss between requests
-              });
-
-              it("The giveaway owner's address must be the deployer's address", async function () {
-                  const giveawayOwner = await giveaway.getGiveawayOwner();
-
-                  assert.strictEqual(giveawayOwner, user0.address);
-              });
-
-              it("The NFT's address must be a vaild address, and not address 0", async function () {
-                  const prizeNFTAddress = await giveaway.getNFTAddress();
-
-                  assert.notStrictEqual(prizeNFTAddress, "0");
               });
           });
       })
