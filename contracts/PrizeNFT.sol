@@ -20,7 +20,7 @@ contract PrizeNFT is ERC721URIStorage, Ownable {
      * Constructor
      * @param _nftUri The NFT metadata URI
      */
-    constructor(string memory _nftUri) ERC721("Pize NFT", "PNFT") Ownable(msg.sender) {
+    constructor(string memory _nftUri) ERC721("Prize NFT", "PNFT") Ownable(msg.sender) {
         nftUri = _nftUri;
     }
 
