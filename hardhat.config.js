@@ -16,8 +16,10 @@ const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL || "";
 const REPORT_GAS = process.env.REPORT_GAS || false;
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || "";
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "";
-const PRIVATE_ACCOUNT_1 = process.env.PRIVATE_ACCOUNT_1 || "";
-const PRIVATE_ACCOUNT_2 = process.env.PRIVATE_ACCOUNT_2 || "";
+const PRIVATE_ACCOUNT_1 =
+    process.env.PRIVATE_ACCOUNT_1 || "0x0000000000000000000000000000000000000000000000000000000000000000";
+const PRIVATE_ACCOUNT_2 =
+    process.env.PRIVATE_ACCOUNT_2 || "0x0000000000000000000000000000000000000000000000000000000000000000";
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
