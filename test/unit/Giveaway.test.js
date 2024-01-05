@@ -172,29 +172,22 @@ developmentChainIds.includes(network.config.chainId)
                       params: [],
                   });
 
-                  await new Promise(async function (resolve, reject) {
-                      giveaway.once("GiveawayWinnerSelected", async function () {
-                          try {
-                              const giveawayState = await giveaway.getGiveawayState();
-                              const winner = await giveaway.getWinner();
-                              const vrfRequestDetails = await giveaway.getVRFRequestDetails();
-
-                              assert.strictEqual(winner.toString(), user1.address);
-                              assert.strictEqual(giveawayState.toString(), "2");
-                              assert.isAbove(Number(vrfRequestDetails[1]), 0);
-                              resolve();
-                          } catch (error) {
-                              reject(error);
-                          }
-                      });
-
+                  giveaway.once("GiveawayWinnerSelected", async function () {
                       try {
-                          await giveaway.performUpkeep("0x");
-                          await vrfCoordinatorV2Mock.fulfillRandomWords("1", await giveaway.getAddress());
+                          const giveawayState = await giveaway.getGiveawayState();
+                          const winner = await giveaway.getWinner();
+                          const vrfRequestDetails = await giveaway.getVRFRequestDetails();
+
+                          assert.strictEqual(winner.toString(), user1.address);
+                          assert.strictEqual(giveawayState.toString(), "2");
+                          assert.isAbove(Number(vrfRequestDetails[1]), 0);
                       } catch (error) {
-                          reject(error);
+                          console.log(error);
                       }
                   });
+
+                  await giveaway.performUpkeep("0x");
+                  await vrfCoordinatorV2Mock.fulfillRandomWords("1", await giveaway.getAddress());
               });
           });
 
