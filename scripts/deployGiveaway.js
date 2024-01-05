@@ -7,7 +7,7 @@ const ERC20ABI = require("../utils/ERC20ABI.js");
 const deployGiveaway = async function () {
     const isDevelopmentChain = developmentChainIds.includes(network.config.chainId);
     const [user0] = await ethers.getSigners();
-    const NFT_METADATA_HASH = process.env.NFT_METADATA_HASH;
+    const NFT_METADATA_HASH = process.env.NFT_METADATA_HASH || "rndm0123456789val"; // use random value for metadata hash if on a local testing chain
     let vrfCoordinatorV2Mock, vrfCoordinatorAddress;
     let upkeepContractAddress;
     let keyHash, callbackGasLimit, interval, linkTokenAddress;

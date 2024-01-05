@@ -53,7 +53,7 @@ developmentChainIds.includes(network.config.chainId)
               it("sets the NFT metadata uri string to what was set in the .env", async function () {
                   const nftMetadataUri = await giveaway.getNFTMetadataUri();
 
-                  assert.isTrue(nftMetadataUri.includes(process.env.NFT_METADATA_HASH));
+                  assert.isTrue(nftMetadataUri.includes(process.env.NFT_METADATA_HASH || "rndm0123456789val")); // if the metadat hash isn't set (for local testing chain, use random value)
               });
 
               it("sets the subscripton ID to 1", async function () {
