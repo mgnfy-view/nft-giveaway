@@ -45,9 +45,7 @@ const deployGiveaway = async function () {
             networkConfig[network.config.chainId]?.blockConfirmations ?? 1
         } block confirmation/confirmations`,
     );
-    const txReceipt = await giveaway
-        .deploymentTransaction()
-        .wait(networkConfig[network.config.chainId]?.blockConfirmations ?? 1);
+    await giveaway.deploymentTransaction().wait(networkConfig[network.config.chainId]?.blockConfirmations ?? 1);
     console.log("Done Deploying");
 
     if (isDevelopmentChain) {

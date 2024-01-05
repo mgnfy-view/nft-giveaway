@@ -14,7 +14,7 @@ const deployMocks = async function () {
             networkConfig[network.config.chainId]?.blockConfirmations ?? 1
         } block confirmation/confirmations`,
     );
-    const txReceipt = await vrfCoordinatorV2Mock
+    await vrfCoordinatorV2Mock
         .deploymentTransaction()
         .wait(networkConfig[network.config.chainId]?.blockConfirmations ?? 1);
     console.log("Done Deploying");
