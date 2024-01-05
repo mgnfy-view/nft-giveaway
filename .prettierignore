@@ -8,3 +8,6 @@ typechain-types
 # Hardhat files
 cache
 artifacts
+
+# Github workflow YAML files
+*.yaml
