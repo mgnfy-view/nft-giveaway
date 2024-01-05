@@ -1,0 +1,39 @@
+name: Build documentation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: '**/package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build docs
+        run: npx hardhat docgen
+
+      - name: Commit docs
+        run: |
+          git config --local user.name "Sahil-Gujrati"
+          git config --local user.email "sahilgujrati12@gmail.com"
+          git commit docs/ -m "docs: Update docs"
+
+      - name: Push docs
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

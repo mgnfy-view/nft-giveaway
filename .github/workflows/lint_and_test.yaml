@@ -1,0 +1,47 @@
+name: Lint and test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: '**/package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint contracts
+        run: npx solhint contracts/**/*.sol
+
+      - name: Lint scripts
+        run: npx eslint scripts/**/*.js
+
+      - name: Lint test files
+        run: npx eslint test/**/*.js
+
+      - name: Run tests
+        run: npx hardhat test
+
+        
+        
+
+
+
