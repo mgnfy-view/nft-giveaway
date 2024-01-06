@@ -1,15 +1,3 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
-
-<a name="readme-top"></a>
-
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -25,22 +13,19 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
+[![codecov](https://codecov.io/gh/Sahil-Gujrati/nft-giveaway/graph/badge.svg?token=NOAIIBRO3B)](https://codecov.io/gh/Sahil-Gujrati/nft-giveaway)
 
-<!-- PROJECT LOGO -->
 <div align="center">
-  <!-- <a href="https://github.com/Sahil-Gujrati/nft-giveaway">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a> -->
 
-<h3 align="center">NFT Giveaway</h3>
+<br />
+
+<h1 align="center">NFT Giveaway</h3>
 
   <p align="center">
-    A giveaway smart contract where anyone can join to have a fair chance at winning an awesome NFT
+    A giveaway smart contract where anyone can join in to have a fair chance at winning an awesome NFT
     <br />
-    <!-- <a href="https://github.com/Sahil-Gujrati/nft-giveaway"><strong>Explore the docs »</strong></a> -->
-    <!-- <br />
-    <br /> -->
-    <!-- <a href="https://github.com/Sahil-Gujrati/nft-giveaway">View Demo</a> -->
+    <a href="https://github.com/Sahil-Gujrati/nft-giveaway/blob/main/docs"><strong>Explore the docs »</strong></a>
+    <br />
     <a href="https://github.com/Sahil-Gujrati/nft-giveaway/issues">Report Bug</a>
     ·
     <a href="https://github.com/Sahil-Gujrati/nft-giveaway/issues">Request Feature</a>
@@ -93,11 +78,11 @@ If you want to see the full list of giveaway smart contract functions and their 
 
 ### Built With
 
--   ![Hardhat][hardhat-url]
--   ![JavaScript][javascript-url]
--   ![Solidity][solidity-url]
--   ![Ethereum][ethereum-url]
--   ![npm][npm-url]
+- ![Hardhat][hardhat-url]
+- ![JavaScript][javascript-url]
+- ![Solidity][solidity-url]
+- ![Ethereum][ethereum-url]
+- ![npm][npm-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -125,27 +110,27 @@ npm install
 
 Depending on the network you want to deploy the giveaway to (I highly advise against deploying on mainnet), you'll need the following values:
 
--   RPC URL: you can get this from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/) for any of your preferred testnet
--   Private key for one of your accounts: create your MetaMask wallet and get your private key from there, this private key will be used to deploy the contract and fund it with LINK tokens. Ensure that it has enough ETH and LINK balance
--   Private key for another account: optional
--   NFT metadata hash: you'll need to upload your NFT metadata to IPFS and get its hash
--   Etherscan and CoinMarketCap api keys: optionally, you can get the [etherscan api key](https://docs.etherscan.io/getting-started/creating-an-account) and [coinmarketcap api key](https://coinmarketcap.com/api/). The former will let you verify contracts on etherscan, and the latter will provide you with gas reports with gas consumed in your preferred currency that you may set in the `hardhat.config.js` file's gasReport section.
+- RPC URL: you can get this from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/) for any of your preferred testnet
+- Private key for one of your accounts: create your MetaMask wallet and get your private key from there, this private key will be used to deploy the contract and fund it with LINK tokens. Ensure that it has enough ETH and LINK balance
+- Private key for another account: optional
+- NFT metadata hash: you'll need to upload your NFT metadata to IPFS and get its hash
+- Etherscan and CoinMarketCap api keys: optionally, you can get the [etherscan api key](https://docs.etherscan.io/getting-started/creating-an-account) and [coinmarketcap api key](https://coinmarketcap.com/api/). The former will let you verify contracts on etherscan, and the latter will provide you with gas reports with gas consumed in your preferred currency that you may set in the `hardhat.config.js` file's gasReport section.
 
 Set these values correctly in the `.env.template` file in the top level of the project, and rename the file to `.env`, and bring them in your `hardhat.config.js` file. An example configuration for the Sepolia testnet is given in the same file.
 
 You'll also need to configure the `helper.config.js` file. Make sure you have the ID of the testnet you're deploying to.
 In the networkConfig object in `helper.config.js`, add the testnet ID as the key, and add the object containing configuration details as the value for the testnet ID. You'll need:
 
--   name: name of the testnet
--   blockConfirmations: the number of blocks you want to wait during deployment (6 is generally a good number)
--   keyHash: the amount of gas you want to spend on each random word request
--   callbackGasLimit: the maximum gas limit for fulfillRandomWords function
--   interval: the time in seconds after which to pick a winner
--   vrfCoordinatorAddress: the address of Chainlink's VRFCoordinator for your preferred testnet
--   linkTokenAddress: the address of the LINK token contract for your preferred document
--   upkeepContractAddress: the address of the Chainlink registrar for your preferred network
--   fundLinkAmountForSubscription: the amount of LINK tokens to fund the subscription ID dynamically created by the contract on deployment
--   fundLinkAmountForUpkeep: the amount of LINK tokens to fund the upkeep
+- name: name of the testnet
+- blockConfirmations: the number of blocks you want to wait during deployment (6 is generally a good number)
+- keyHash: the amount of gas you want to spend on each random word request
+- callbackGasLimit: the maximum gas limit for fulfillRandomWords function
+- interval: the time in seconds after which to pick a winner
+- vrfCoordinatorAddress: the address of Chainlink's VRFCoordinator for your preferred testnet
+- linkTokenAddress: the address of the LINK token contract for your preferred document
+- upkeepContractAddress: the address of the Chainlink registrar for your preferred network
+- fundLinkAmountForSubscription: the amount of LINK tokens to fund the subscription ID dynamically created by the contract on deployment
+- fundLinkAmountForUpkeep: the amount of LINK tokens to fund the upkeep
 
 An example configuration for the Sepolia testnet (ID: 11155111) is given in the `helper.config.js` file. You can get more details about these values at [Chainlink VRF docs](https://docs.chain.link/vrf) and [Chainlink Automation docs](https://docs.chain.link/chainlink-automation).
 
@@ -166,16 +151,6 @@ npx hardhat Cleanup --address "YOUR_DEPLOYED_GIVEAWAY'S_ADDRESS" --network <netw
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- USAGE EXAMPLES -->
-
-<!-- ## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 <!-- ROADMAP -->
 
@@ -213,8 +188,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Contact
 
 Sahil Gujrati - sahilgujrati12@gmail.com
-
-Project Link: [https://github.com/Sahil-Gujrati/nft-giveaway](https://github.com/Sahil-Gujrati/nft-giveaway)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
