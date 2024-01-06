@@ -11,3 +11,6 @@ artifacts
 
 # Github workflow YAML files
 *.yaml
+
+# Markdown files
+*.md
