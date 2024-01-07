@@ -1,7 +1,7 @@
 const { network, ethers } = require("hardhat");
 const { assert, expect } = require("chai");
 const { loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
-const deployMain = require("../../scripts/deployMain.js");
+const deployGiveaway = require("../../scripts/deployGiveaway.js");
 const { developmentChainIds, networkConfig } = require("../../helper.config.js");
 
 developmentChainIds.includes(network.config.chainId)
@@ -10,7 +10,7 @@ developmentChainIds.includes(network.config.chainId)
 
           beforeEach(async function () {
               [user0, user1] = await ethers.getSigners();
-              ({ giveaway, vrfCoordinatorV2Mock } = await loadFixture(deployMain));
+              ({ giveaway, vrfCoordinatorV2Mock } = await loadFixture(deployGiveaway));
           });
 
           describe("Giveaway initialization", function () {
@@ -41,7 +41,7 @@ developmentChainIds.includes(network.config.chainId)
               it("sets the interval after which to pick a winner equal to the interval specified in the helper config", async function () {
                   const interval = await giveaway.getInterval();
 
-                  assert.strictEqual(interval.toString(), networkConfig[network.config.chainId].interval.toString()); // the keyHash, callbackGasLimit, and interval for local network is the same as that for the sepolia network
+                  assert.strictEqual(interval.toString(), networkConfig[network.config.chainId].interval.toString()); // I've kept the keyHash, callbackGasLimit, and interval for local network the same as that for the sepolia network
               });
 
               it("sets the participant count to 0", async function () {
@@ -53,7 +53,7 @@ developmentChainIds.includes(network.config.chainId)
               it("sets the NFT metadata uri string to what was set in the .env", async function () {
                   const nftMetadataUri = await giveaway.getNFTMetadataUri();
 
-                  assert.isTrue(nftMetadataUri.includes(process.env.NFT_METADATA_HASH || "rndm0123456789val")); // if the metadat hash isn't set (for local testing chain, use random value)
+                  assert.isTrue(nftMetadataUri.includes(process.env.NFT_METADATA_HASH || "rndm0123456789val")); // if the metadata hash isn't set (for local testing chain, use random value)
               });
 
               it("sets the subscripton ID to 1", async function () {
@@ -83,7 +83,7 @@ developmentChainIds.includes(network.config.chainId)
               it("throws an error if the same participant tries to rejoin", async function () {
                   await giveaway.connect(user1).enterGiveaway(); // first entry
 
-                  await expect(giveaway.connect(user1).enterGiveaway()).to.be.rejectedWith("Giveaway__AlreadyJoined"); // rejection on second entry
+                  await expect(giveaway.connect(user1).enterGiveaway()).to.be.rejectedWith("AlreadyJoined"); // rejection on second entry
               });
           });
 
@@ -111,8 +111,8 @@ developmentChainIds.includes(network.config.chainId)
           });
 
           describe("Performing upkeep/requesting a random word", function () {
-              it("reverts with Giveaway__UpkeepNotNeeded if upkeep is not required", async function () {
-                  await expect(giveaway.performUpkeep("0x")).to.be.rejectedWith("Giveaway__UpkeepNotNeeded()");
+              it("reverts with UpkeepNotNeeded if upkeep is not required", async function () {
+                  await expect(giveaway.performUpkeep("0x")).to.be.rejectedWith("UpkeepNotNeeded()");
               });
 
               it("fires the SelectingWinner event", async function () {
