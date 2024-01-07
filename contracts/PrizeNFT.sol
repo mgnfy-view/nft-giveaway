@@ -2,8 +2,6 @@
 
 pragma solidity ^0.8.19;
 
-error PrizeNFT__RewardMintedGiveawayClosed();
-
 import {ERC721URIStorage, ERC721} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -16,8 +14,9 @@ contract PrizeNFT is ERC721URIStorage, Ownable {
     uint256 public tokenCounter = 0;
     string public nftUri;
 
+    error RewardMintedGiveawayClosed();
+
     /**
-     * Constructor
      * @param _nftUri The NFT metadata URI
      */
     constructor(string memory _nftUri) ERC721("Prize NFT", "PNFT") Ownable(msg.sender) {
@@ -30,7 +29,7 @@ contract PrizeNFT is ERC721URIStorage, Ownable {
      * @param winner The winner that was randomly selected by the giveaway
      */
     function mintReward(address winner) public onlyOwner {
-        if (tokenCounter != 0) revert PrizeNFT__RewardMintedGiveawayClosed();
+        if (tokenCounter != 0) revert RewardMintedGiveawayClosed();
         tokenCounter++;
         _safeMint(winner, tokenCounter);
         _setTokenURI(tokenCounter, nftUri);
