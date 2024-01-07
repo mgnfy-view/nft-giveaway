@@ -116,7 +116,7 @@ Depending on the network you want to deploy the giveaway to (I highly advise aga
 - NFT metadata hash: you'll need to upload your NFT metadata to IPFS and get its hash
 - Etherscan and CoinMarketCap api keys: optionally, you can get the [etherscan api key](https://docs.etherscan.io/getting-started/creating-an-account) and [coinmarketcap api key](https://coinmarketcap.com/api/). The former will let you verify contracts on etherscan, and the latter will provide you with gas reports with gas consumed in your preferred currency that you may set in the `hardhat.config.js` file's gasReport section.
 
-Set these values correctly in the `.env.template` file in the top level of the project, and rename the file to `.env`, and bring them in your `hardhat.config.js` file. An example configuration for the Sepolia testnet is given in the same file.
+Set these values correctly in the `.env.example` file in the top level of the project, and rename the file to `.env`, and bring them in your `hardhat.config.js` file. An example configuration for the Sepolia testnet is given in the same file.
 
 You'll also need to configure the `helper.config.js` file. Make sure you have the ID of the testnet you're deploying to.
 In the networkConfig object in `helper.config.js`, add the testnet ID as the key, and add the object containing configuration details as the value for the testnet ID. You'll need:
