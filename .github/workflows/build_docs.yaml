@@ -3,9 +3,8 @@ name: Build documentation
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
+permissions: write-all
+
 
 jobs:
   build_documentation:
