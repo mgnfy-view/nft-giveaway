@@ -6,7 +6,7 @@ Please ensure that the feature you are requesting for is relevant, and does not 
 
 ## Describe
 
-Describe your proposed feature in detail and how would it help. Does it solve an issue, or is it supposed to be a useful addition?
+Describe your proposed feature in detail and how it  would help. Does it solve an issue, or is it supposed to be a useful addition?
 
 ## Effects
 
@@ -14,4 +14,4 @@ How would the feature affect the current state of the project? Does it require d
 
 ## Additional details
 
-Explain your how you would go about implementing the feature.
+Explain how you would go about implementing the feature.

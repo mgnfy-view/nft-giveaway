@@ -4,8 +4,8 @@
 
 Please answer the following questions for yourself before submitting an issue.
 
-- [ ] I ran multiple checks and tests
 - [ ] I am running the latest version
+- [ ] I ran multiple checks and tests
 - [ ] I checked the documentation and found no answer
 - [ ] I checked to make sure that this issue has not already been filed
 
@@ -19,7 +19,7 @@ What is the current behavior?
 
 ## Failure Information (for bugs)
 
-Please help provide information about the failure if this is a bug. If it is not a bug, please remove the rest of this template.
+Please provide information about the failure if this is a bug. If it is not a bug, please remove the rest of this template.
 
 ## Steps to Reproduce
 
