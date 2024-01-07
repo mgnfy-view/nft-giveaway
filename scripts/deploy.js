@@ -1,3 +1,3 @@
-const deployMain = require("./deployMain.js");
+const deployGiveaway = require("./deployGiveaway.js");
 
-deployMain().catch((error) => console.log(error));
+deployGiveaway().catch((error) => console.log(error));
