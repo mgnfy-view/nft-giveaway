@@ -1,11 +1,4 @@
 <!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -16,13 +9,9 @@
 [![codecov](https://codecov.io/gh/Sahil-Gujrati/nft-giveaway/graph/badge.svg?token=NOAIIBRO3B)](https://codecov.io/gh/Sahil-Gujrati/nft-giveaway)
 
 <div align="center">
-
-<br />
-
-<h1 align="center">NFT Giveaway</h3>
-
+  <h1 align="center">NFT Giveaway</h3>
   <p align="center">
-    A giveaway smart contract where anyone can join in to have a fair chance at winning an awesome NFT
+      A giveaway smart contract where anyone can join in to have a fair chance at winning an awesome NFT
     <br />
     <a href="https://github.com/Sahil-Gujrati/nft-giveaway/blob/main/docs"><strong>Explore the docs »</strong></a>
     <br />
@@ -33,9 +22,9 @@
   </p>
 </div>
 
-<br />
 
 <!-- TABLE OF CONTENTS -->
+
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -60,6 +49,7 @@
   </ol>
 </details>
 
+
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
@@ -74,8 +64,6 @@ This project allows anyone to configure and create a giveaway of their own on EV
 
 If you want to see the full list of giveaway smart contract functions and their descriptions, navigate to `./docs/index.html`. Open the index.html page in a browser to view the documentation.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Built With
 
 - ![Hardhat][hardhat-url]
@@ -84,7 +72,6 @@ If you want to see the full list of giveaway smart contract functions and their 
 - ![Ethereum][ethereum-url]
 - ![npm][npm-url]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 
@@ -150,7 +137,6 @@ After the giveaway has ended, you can use the removeGiveawayFromConsumers(), can
 npx hardhat Cleanup --address "YOUR_DEPLOYED_GIVEAWAY'S_ADDRESS" --network <network-name>
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 
@@ -165,7 +151,6 @@ npx hardhat Cleanup --address "YOUR_DEPLOYED_GIVEAWAY'S_ADDRESS" --network <netw
 
 See the [open issues](https://github.com/Sahil-Gujrati/nft-giveaway/issues) for a full list of proposed features (and known issues).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 
@@ -173,7 +158,6 @@ See the [open issues](https://github.com/Sahil-Gujrati/nft-giveaway/issues) for 
 
 Check out [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for contribution guidelines.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
 
@@ -181,7 +165,6 @@ Check out [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for contribution guidelin
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
 
@@ -189,7 +172,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Sahil Gujrati - sahilgujrati12@gmail.com
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
