@@ -29,16 +29,16 @@ jobs:
         run: npm ci
 
       - name: Lint contracts
-        run: npx solhint contracts/**/*.sol
+        run: npm run lint-sol
 
       - name: Lint scripts
-        run: npx eslint scripts/**/*.js
+        run: npm run lint-js-scripts
 
       - name: Lint test files
-        run: npx eslint test/**/*.js
+        run: npm run lint-js-test
 
       - name: Run tests
-        run: npx hardhat test
+        run: npm run test
 
         
         

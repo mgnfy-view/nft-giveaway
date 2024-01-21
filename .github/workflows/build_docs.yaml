@@ -33,6 +33,7 @@ jobs:
         run: |
           git config --local user.name "Sahil-Gujrati"
           git config --local user.email "sahilgujrati12@gmail.com"
+          git add .
           git commit docs/ -m "docs: Update docs"
 
       - name: Push docs
