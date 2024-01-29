@@ -24,8 +24,14 @@ const deployGiveaway = async function () {
         } = networkConfig);
     } else {
         const chainId = network.config.chainId;
-        ({ keyHash, callbackGasLimit, interval, vrfCoordinatorAddress, linkTokenAddress, upkeepContractAddress } =
-            networkConfig[chainId]);
+        ({
+            keyHash,
+            callbackGasLimit,
+            interval,
+            vrfCoordinatorAddress,
+            linkTokenAddress,
+            upkeepContractAddress,
+        } = networkConfig[chainId]);
     }
     const constructorArgs = [
         keyHash,
@@ -45,14 +51,17 @@ const deployGiveaway = async function () {
             networkConfig[network.config.chainId]?.blockConfirmations ?? 1
         } block confirmation/confirmations`,
     );
-    await giveaway.deploymentTransaction().wait(networkConfig[network.config.chainId]?.blockConfirmations ?? 1);
+    await giveaway
+        .deploymentTransaction()
+        .wait(networkConfig[network.config.chainId]?.blockConfirmations ?? 1);
     console.log("Done Deploying");
 
     if (isDevelopmentChain) {
         console.log("Funding subscription");
         await vrfCoordinatorV2Mock.fundSubscription(
             await giveaway.getSubscriptionId(),
-            networkConfig[network.config.chainId]?.fundLinkAmount ?? ethers.parseEther("5"),
+            networkConfig[network.config.chainId]?.fundLinkAmount ??
+                ethers.parseEther("5"),
         );
         console.log("Subscription funded");
 
@@ -60,58 +69,70 @@ const deployGiveaway = async function () {
     } else {
         console.log(
             `Funding contract with ${
-                networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ?? ethers.parseEther("5")
+                networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ??
+                ethers.parseEther("5")
             } LINK for the subscription`,
         );
         const linkToken = new ethers.Contract(linkTokenAddress, ERC20ABI, user0);
         await linkToken.transfer(
             await giveaway.getAddress(),
-            networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ?? ethers.parseEther("5"),
+            networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ??
+                ethers.parseEther("5"),
         );
         console.log(
             `Funded contract with ${
-                networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ?? ethers.parseEther("5")
+                networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ??
+                ethers.parseEther("5")
             } LINK`,
         );
 
         console.log(
             `Funding subscription with ${
-                networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ?? ethers.parseEther("5")
+                networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ??
+                ethers.parseEther("5")
             } LINK`,
         );
         await giveaway.fundSubscription(
-            networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ?? ethers.parseEther("5"),
+            networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ??
+                ethers.parseEther("5"),
         );
         console.log(
             `Funded with ${
-                networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ?? ethers.parseEther("5")
+                networkConfig[network.config.chainId]?.fundLinkAmountForSubscription ??
+                ethers.parseEther("5")
             } LINK for the subscription`,
         );
 
         console.log(
             `Funding contract with ${
-                networkConfig[network.config.chainId]?.fundLinkAmountForUpkeep ?? ethers.parseEther("3")
+                networkConfig[network.config.chainId]?.fundLinkAmountForUpkeep ??
+                ethers.parseEther("3")
             } LINK for upkeep registration`,
         );
         await linkToken.transfer(
             await giveaway.getAddress(),
-            networkConfig[network.config.chainId]?.fundLinkAmountForUpkeep ?? ethers.parseEther("3"),
+            networkConfig[network.config.chainId]?.fundLinkAmountForUpkeep ??
+                ethers.parseEther("3"),
         );
         console.log(
             `Funded with ${
-                networkConfig[network.config.chainId]?.fundLinkAmountForUpkeep ?? ethers.parseEther("3")
+                networkConfig[network.config.chainId]?.fundLinkAmountForUpkeep ??
+                ethers.parseEther("3")
             }  LINK`,
         );
 
         console.log("Registering contract for upkeep");
         await giveaway.registerForUpkeep(
-            networkConfig[network.config.chainId]?.fundLinkAmountForUpkeep ?? ethers.parseEther("3"),
+            networkConfig[network.config.chainId]?.fundLinkAmountForUpkeep ??
+                ethers.parseEther("3"),
         );
         console.log("registered for upkeep");
 
         if (process.env.ETHERSCAN_API_KEY) {
             await verify(await giveaway.getAddress(), constructorArgs);
-            await verify(await giveaway.getNFTAddress(), [`https://ipfs.io/ipfs/${NFT_METADATA_HASH}`]);
+            await verify(await giveaway.getNFTAddress(), [
+                `https://ipfs.io/ipfs/${NFT_METADATA_HASH}`,
+            ]);
         }
 
         return giveaway;
