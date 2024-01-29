@@ -56,13 +56,15 @@
 
 Giveaways are a form of expression of love of creators/influencers towards their community and supporters. Hundreds of giveaways occur every month, and thousands of people join in to have a shot at getting a console, PC, movie tickets, a pair of those shining new sneakers and what not.
 
-Making the process of selecting a winner for the giveaway decentralized and devoid of any bias or tampering is a difficult task. That's where blockchain technology comes to the rescue! Using Chainlink's VRF service, which provides verifiable random numbers, we can pick a truly random winner. Everything is carried out on-chain with smart contracts - entering the giveaway, picking a winner, and even sending him/her the prize!
+Making the process of selecting a winner for the giveaway decentralized and devoid of any tampering is a difficult task. That's where the blockchain technology comes to the rescue! Using smart contracts and Chainlink's VRF service, which provides verifiable random numbers, we can pick a truly random winner. Everything is carried out on-chain with smart contracts - entering the giveaway, picking a winner, and even sending him/her the prize!
 
-When the winner is selected, an NFT (Non-Fungible Token) is minted to him/her. The NFT can be representative of physical assets - such as a pair of sneakers - and hold information about its current state in its metadata! The winner gets two prizes, first, his/her sneakers, and second, the NFT! The NFT can even be burnt after the winner gets the sneakers delivered to him/her, ensuring that the prize was claimed successfully.
+When the winner is selected, an NFT (Non-Fungible Token) is minted to the winner. The NFT can itself be a prize (a collectible), but can also be representative of physical assets - such as a pair of sneakers - and hold information about its current state in its metadata! The winner gets two prizes: first, their sneakers, and second, the NFT! The NFT can even be burnt after the winner gets the sneakers delivered to them, ensuring that the prize was claimed successfully.
 
-This project allows anyone to configure and create a giveaway of their own on EVM compatible chains. Though this project is well tested and documented, it hasn't been audited yet, so please don't deploy it on the mainnet! Keep your giveaways restricted to testnets only, if you intend to use this project.
+This project allows anyone to configure and create a giveaway of their own on EVM compatible chains. Though this project is well tested and documented, it hasn't been audited yet, so please don't deploy it on the mainnet! Keep your giveaways restricted to testnets only.
 
-If you want to see the full list of giveaway smart contract functions and their descriptions, navigate to `./docs/index.html`. Open the index.html page in a browser to view the documentation.
+If you want to see the full list of the giveaway smart contract's functions and their descriptions, navigate to `./docs/index.html`. Open the index.html page in a browser to view the documentation.
+
+Additionally, you can view the most recent deployment of the giveaway smart contract [here](https://sepolia.etherscan.io/address/0x37502e17E255f44c25cA93838AA6F3eC2750Be1A).
 
 ### Built With
 
@@ -79,7 +81,7 @@ If you want to see the full list of giveaway smart contract functions and their 
 
 ### Prerequisites
 
-Make sure you have node.js and git installed and configured on your system. Also, you need to have a MetaMask account (preferably two) with sufficient ETH, and LINK tokens. If you are using the Sepolia testnet, you can get Sepolia testnet ETH from [Alchemy](https://sepoliafaucet.com/) and LINK tokens from [Chainlink faucet](https://faucets.chain.link/).
+Make sure you have node.js and git installed and configured on your system. Also, you need to have a MetaMask account (preferably two) with sufficient ETH, and LINK tokens. If you are using the Sepolia testnet, you can get Sepolia testnet ETH from [Alchemy](https://sepoliafaucet.com/) and LINK tokens from [Chainlink faucet](https://faucets.chain.link/). Try to get about 3-4 ETH, and 12 LINK tokens.
 
 ### Installation
 
@@ -92,31 +94,31 @@ git clone https://github.com/Sahil-Gujrati/nft-giveaway.git
 Cd into the project folder and install the dependencies
 
 ```shell
+cd nft-giveaway
 npm install
 ```
 
 Depending on the network you want to deploy the giveaway to (I highly advise against deploying on mainnet), you'll need the following values:
 
-- RPC URL: you can get this from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/) for any of your preferred testnet
-- Private key for one of your accounts: create your MetaMask wallet and get your private key from there, this private key will be used to deploy the contract and fund it with LINK tokens. Ensure that it has enough ETH and LINK balance
-- Private key for another account: optional
+- RPC URL: you can get this from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/) for any of your preferred chain
+- Private key for one of your accounts: create your MetaMask wallet and get your private key from there. This private key will be used to deploy the contract and fund it with LINK tokens. Ensure that it has enough ETH and LINK tokens
 - NFT metadata hash: you'll need to upload your NFT metadata to IPFS and get its hash
-- Etherscan and CoinMarketCap api keys: optionally, you can get the [etherscan api key](https://docs.etherscan.io/getting-started/creating-an-account) and [coinmarketcap api key](https://coinmarketcap.com/api/). The former will let you verify contracts on etherscan, and the latter will provide you with gas reports with gas consumed in your preferred currency that you may set in the `hardhat.config.js` file's gasReport section.
+- Etherscan and CoinMarketCap api keys: optionally, you can get the [etherscan api key](https://docs.etherscan.io/getting-started/creating-an-account) and [coinmarketcap api key](https://coinmarketcap.com/api/). The former will let you verify contracts on etherscan, and the latter will provide you with gas reports with gas consumed mentioned in your preferred currency that you may set in the `hardhat.config.js` file's gasReport section.
 
 Set these values correctly in the `.env.example` file in the top level of the project, and rename the file to `.env`, and bring them in your `hardhat.config.js` file. An example configuration for the Sepolia testnet is given in the same file.
 
-You'll also need to configure the `helper.config.js` file. Make sure you have the ID of the testnet you're deploying to.
-In the networkConfig object in `helper.config.js`, add the testnet ID as the key, and add the object containing configuration details as the value for the testnet ID. You'll need:
+You'll also need to configure the `helper.config.js` file. Make sure you have the ID of the chain you're deploying to.
+In the networkConfig object in `helper.config.js`, add the blockchain's ID as the key, and add the object containing configuration details as the value. You'll need:
 
-- name: name of the testnet
+- name: name of the chain
 - blockConfirmations: the number of blocks you want to wait during deployment (6 is generally a good number)
 - keyHash: the amount of gas you want to spend on each random word request
 - callbackGasLimit: the maximum gas limit for fulfillRandomWords function
 - interval: the time in seconds after which to pick a winner
-- vrfCoordinatorAddress: the address of Chainlink's VRFCoordinator for your preferred testnet
-- linkTokenAddress: the address of the LINK token contract for your preferred document
-- upkeepContractAddress: the address of the Chainlink registrar for your preferred network
-- fundLinkAmountForSubscription: the amount of LINK tokens to fund the subscription ID dynamically created by the contract on deployment
+- vrfCoordinatorAddress: the address of Chainlink's VRFCoordinator for your preferred chain
+- linkTokenAddress: the address of the LINK token contract for your preferred chain
+- upkeepContractAddress: the address of the Chainlink registrar for your preferred chain
+- fundLinkAmountForSubscription: the amount of LINK tokens to fund the subscription ID which is dynamically created by the contract on deployment
 - fundLinkAmountForUpkeep: the amount of LINK tokens to fund the upkeep
 
 An example configuration for the Sepolia testnet (ID: 11155111) is given in the `helper.config.js` file. You can get more details about these values at [Chainlink VRF docs](https://docs.chain.link/vrf) and [Chainlink Automation docs](https://docs.chain.link/chainlink-automation).
@@ -131,7 +133,7 @@ The contract will create a subscription and add itself as a consumer. The deploy
 
 That's it. The giveaway should be up and running, and people can join in! Wait to find out who's the winner!
 
-After the giveaway has ended, you can use the removeGiveawayFromConsumers(), cancelSubscription(), and withdraw() methods to clean up and claim the remaining LINK tokens. You can use the cleanup task for that:
+After the giveaway has ended, you can use the removeGiveawayFromConsumers(), cancelSubscription(), and withdraw() methods to clean up and claim the unused LINK tokens. You can use the cleanup task for that:
 
 ```shell
 npx hardhat Cleanup --address "YOUR_DEPLOYED_GIVEAWAY'S_ADDRESS" --network <network-name>
@@ -142,10 +144,11 @@ npx hardhat Cleanup --address "YOUR_DEPLOYED_GIVEAWAY'S_ADDRESS" --network <netw
 
 ## Roadmap
 
--   [x] Create the NFT smart Contract
--   [x] Create the Giveaway smart Contract
--   [x] Write deployment scripts
+-   [x] Write the NFT smart contract
+-   [x] Write the giveaway smart Contract
+-   [x] Write the deployment script
 -   [x] Carry out unit testing
+-   [x] Deploy the giveaway contract on the Sepolia testnet 
 -   [x] Write documentation and generate docs
 -   [x] Write a good README.md
 
