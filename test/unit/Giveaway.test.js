@@ -23,7 +23,10 @@ developmentChainIds.includes(network.config.chainId)
               it("sets the NFT's address to a vaild address, and not address 0", async function () {
                   const prizeNFTAddress = await giveaway.getNFTAddress();
 
-                  assert.notStrictEqual(prizeNFTAddress, "0x0000000000000000000000000000000000000000");
+                  assert.notStrictEqual(
+                      prizeNFTAddress,
+                      "0x0000000000000000000000000000000000000000",
+                  );
               });
 
               it("sets the giveaway in open state, indicated by 0", async function () {
@@ -35,13 +38,19 @@ developmentChainIds.includes(network.config.chainId)
               it("sets the recent winner's address to 0 (indicating no winner)", async function () {
                   const recentWinner = await giveaway.getWinner();
 
-                  assert.strictEqual(recentWinner.toString(), "0x0000000000000000000000000000000000000000");
+                  assert.strictEqual(
+                      recentWinner.toString(),
+                      "0x0000000000000000000000000000000000000000",
+                  );
               });
 
               it("sets the interval after which to pick a winner equal to the interval specified in the helper config", async function () {
                   const interval = await giveaway.getInterval();
 
-                  assert.strictEqual(interval.toString(), networkConfig[network.config.chainId].interval.toString()); // I've kept the keyHash, callbackGasLimit, and interval for local network the same as that for the sepolia network
+                  assert.strictEqual(
+                      interval.toString(),
+                      networkConfig[network.config.chainId].interval.toString(),
+                  ); // I've kept the keyHash, callbackGasLimit, and interval for local network the same as that for the sepolia network
               });
 
               it("sets the participant count to 0", async function () {
@@ -53,7 +62,11 @@ developmentChainIds.includes(network.config.chainId)
               it("sets the NFT metadata uri string to what was set in the .env", async function () {
                   const nftMetadataUri = await giveaway.getNFTMetadataUri();
 
-                  assert.isTrue(nftMetadataUri.includes(process.env.NFT_METADATA_HASH || "rndm0123456789val")); // if the metadata hash isn't set (for local testing chain, use random value)
+                  assert.isTrue(
+                      nftMetadataUri.includes(
+                          process.env.NFT_METADATA_HASH || "rndm0123456789val",
+                      ),
+                  ); // if the metadata hash isn't set (for local testing chain, use random value)
               });
 
               it("sets the subscripton ID to 1", async function () {
@@ -83,7 +96,9 @@ developmentChainIds.includes(network.config.chainId)
               it("throws an error if the same participant tries to rejoin", async function () {
                   await giveaway.connect(user1).enterGiveaway(); // first entry
 
-                  await expect(giveaway.connect(user1).enterGiveaway()).to.be.rejectedWith("AlreadyJoined"); // rejection on second entry
+                  await expect(
+                      giveaway.connect(user1).enterGiveaway(),
+                  ).to.be.rejectedWith("Giveaway__AlreadyJoined"); // rejection on second entry
               });
           });
 
@@ -112,7 +127,9 @@ developmentChainIds.includes(network.config.chainId)
 
           describe("Performing upkeep/requesting a random word", function () {
               it("reverts with UpkeepNotNeeded if upkeep is not required", async function () {
-                  await expect(giveaway.performUpkeep("0x")).to.be.rejectedWith("UpkeepNotNeeded()");
+                  await expect(giveaway.performUpkeep("0x")).to.be.rejectedWith(
+                      "Giveaway__UpkeepNotNeeded()",
+                  );
               });
 
               it("fires the SelectingWinner event", async function () {
@@ -126,7 +143,10 @@ developmentChainIds.includes(network.config.chainId)
                       params: [],
                   });
 
-                  await expect(giveaway.performUpkeep("0x")).to.emit(giveaway, "SelectingWinner");
+                  await expect(giveaway.performUpkeep("0x")).to.emit(
+                      giveaway,
+                      "SelectingWinner",
+                  );
               });
 
               it("changes the giveaway state to SELECTING_WINNER, indicated by 1 when upkeep is performed", async function () {
@@ -176,7 +196,8 @@ developmentChainIds.includes(network.config.chainId)
                       try {
                           const giveawayState = await giveaway.getGiveawayState();
                           const winner = await giveaway.getWinner();
-                          const vrfRequestDetails = await giveaway.getVRFRequestDetails();
+                          const vrfRequestDetails =
+                              await giveaway.getVRFRequestDetails();
 
                           assert.strictEqual(winner.toString(), user1.address);
                           assert.strictEqual(giveawayState.toString(), "2");
@@ -187,7 +208,10 @@ developmentChainIds.includes(network.config.chainId)
                   });
 
                   await giveaway.performUpkeep("0x");
-                  await vrfCoordinatorV2Mock.fulfillRandomWords("1", await giveaway.getAddress());
+                  await vrfCoordinatorV2Mock.fulfillRandomWords(
+                      "1",
+                      await giveaway.getAddress(),
+                  );
               });
           });
 
