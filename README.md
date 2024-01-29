@@ -64,7 +64,7 @@ This project allows anyone to configure and create a giveaway of their own on EV
 
 If you want to see the full list of the giveaway smart contract's functions and their descriptions, navigate to `./docs/index.html`. Open the index.html page in a browser to view the documentation.
 
-Additionally, you can view the most recent deployment of the giveaway smart contract [here](https://sepolia.etherscan.io/address/0x37502e17E255f44c25cA93838AA6F3eC2750Be1A).
+Additionally, you can view the most recent deployment of the giveaway smart contract [here](sepolia.etherscan.io/address/0x7832e5bb3a9dc44527a97fad7149785132d4a797).
 
 ### Built With
 
@@ -81,7 +81,7 @@ Additionally, you can view the most recent deployment of the giveaway smart cont
 
 ### Prerequisites
 
-Make sure you have node.js and git installed and configured on your system. Also, you need to have a MetaMask account (preferably two) with sufficient ETH, and LINK tokens. If you are using the Sepolia testnet, you can get Sepolia testnet ETH from [Alchemy](https://sepoliafaucet.com/) and LINK tokens from [Chainlink faucet](https://faucets.chain.link/). Try to get about 3-4 ETH, and 12 LINK tokens.
+Make sure you have node.js and git installed and configured on your system. Also, you need to have a MetaMask account with sufficient ETH, and LINK tokens. If you are using the Sepolia testnet, you can get Sepolia testnet ETH from [Alchemy](https://sepoliafaucet.com/) and LINK tokens from [Chainlink faucet](https://faucets.chain.link/). Try to get about 3-4 ETH, and 12 LINK tokens.
 
 ### Installation
 
