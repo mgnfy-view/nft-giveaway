@@ -16,5 +16,7 @@ struct RegistrationParams {
 }
 
 interface AutomationRegistrarInterface {
-    function registerUpkeep(RegistrationParams calldata requestParams) external returns (uint256);
+    function registerUpkeep(
+        RegistrationParams calldata requestParams
+    ) external returns (uint256);
 }
