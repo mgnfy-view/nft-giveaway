@@ -13,7 +13,7 @@ const networkConfig = {
         linkTokenAddress: "0x779877A7B0D9E8603169DdbD7836e478b4624789",
         upkeepContractAddress: "0xb0E49c5D0d05cbc241d68c05BC5BA1d1B7B72976",
         fundLinkAmountForSubscription: ethers.parseEther("12"),
-        fundLinkAmountForUpkeep: ethers.parseEther("3"),
+        fundLinkAmountForUpkeep: ethers.parseEther("5"),
     },
     31337: {
         name: "localhost",
