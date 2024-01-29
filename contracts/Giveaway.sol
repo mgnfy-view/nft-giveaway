@@ -138,24 +138,25 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
      * @param amount The amount to fund the upkeep with
      */
     function registerForUpkeep(uint96 amount) external onlyOwner {
-        RegistrationParams memory params;
-        params.name = "Giveaway";
-        params.encryptedEmail = "0x";
-        params.upkeepContract = address(this); // the contract that requires upkeep
-        params.gasLimit = 500000;
-        params.adminAddress = i_giveawayOwner;
-        params.triggerType = 0; // 0 for custom logic upkeep
-        params.checkData = "0x";
-        params.triggerConfig = "0x";
-        params.offchainConfig = "0x";
-        params.amount = amount;
+        RegistrationParams memory params = RegistrationParams({
+            name: "Giveaway",
+            encryptedEmail: "0x",
+            upkeepContract: address(this),
+            gasLimit: 500000,
+            adminAddress: i_giveawayOwner,
+            triggerType: 0, // 0 for custom logic upkeep,
+            checkData: "0x",
+            triggerConfig: "0x",
+            offchainConfig: "0x",
+            amount: amount
+        });
 
         bool success = i_linkToken.approve(address(i_registrar), params.amount);
         if (!success) revert Giveaway__FailedToApproveLinkTokensForUpkeep();
 
         uint256 upkeepId = i_registrar.registerUpkeep(params);
-        if (upkeepId != 0) i_upkeepId = upkeepId;
-        else revert Giveaway__UpkeepRegistrationFailed();
+        if (upkeepId == 0) revert Giveaway__UpkeepRegistrationFailed();
+        else i_upkeepId = upkeepId;
     }
 
     /**
@@ -269,8 +270,7 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
      * @return The participant's address
      */
     function getParticipant(uint256 index) public view returns (address) {
-        if (index < 0 || index > s_participantCount - 1)
-            revert Giveaway__IndexOutOfBounds();
+        if (index > s_participantCount - 1) revert Giveaway__IndexOutOfBounds();
 
         return s_participantsArray[index];
     }
