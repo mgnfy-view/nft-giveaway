@@ -39,6 +39,7 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#setup-deployment-and-cleanup">Setup and Deployment</a></li>
       </ul>
     </li>
     <!-- <li><a href="#usage">Usage</a></li> -->
@@ -97,6 +98,8 @@ Cd into the project folder and install the dependencies
 cd nft-giveaway
 npm install
 ```
+
+### Setup, Deployment and Cleanup
 
 Depending on the network you want to deploy the giveaway to (I highly advise against deploying on mainnet), you'll need the following values:
 
