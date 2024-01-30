@@ -176,7 +176,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Sahil Gujrati - sahilgujrati12@gmail.com
+Sahil Gujrati - [@twitter_handle](https://twitter.com/Sahil__Gujrati) - sahilgujrati12@gmail.com
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
