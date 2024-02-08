@@ -65,7 +65,7 @@ This project allows anyone to configure and create a giveaway of their own on EV
 
 If you want to see the full list of the giveaway smart contract's functions and their descriptions, navigate to `./docs/index.html`. Open the index.html page in a browser to view the documentation.
 
-Additionally, you can view the most recent deployment of the giveaway smart contract [here](https://sepolia.etherscan.io/address/0x7832e5bb3a9dc44527a97fad7149785132d4a797).
+Additionally, you can view the most recent deployment of the giveaway smart contract [here](https://sepolia.etherscan.io/address/0xb9CB9cFE282bfc443dBD0A47113F14E6E5f40fAb).
 
 ### Built With
 
