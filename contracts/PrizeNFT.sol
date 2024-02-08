@@ -6,9 +6,9 @@ import {ERC721URIStorage, ERC721} from "@openzeppelin/contracts/token/ERC721/ext
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- * @title The prize NFT for the giveaway
+ * @title The prize NFT for the giveaway.
  * @author Sahil Gujrati
- * @notice This NFT will be minted to the winner of the giveaway
+ * @notice This NFT will be minted to the winner of the giveaway.
  */
 contract PrizeNFT is ERC721URIStorage, Ownable {
     uint256 private s_tokenCounter;
@@ -17,28 +17,29 @@ contract PrizeNFT is ERC721URIStorage, Ownable {
     error RewardMintedGiveawayClosed();
 
     /**
-     * @param nftUri The NFT metadata URI
+     * @param nftUri The NFT metadata URI.
      */
     constructor(string memory nftUri) ERC721("Prize NFT", "PNFT") Ownable(msg.sender) {
         s_nftUri = nftUri;
     }
 
     /**
-     * @notice Mints the NFT to the winner's address
-     * @dev This NFT can only be minted once
-     * @param winner The winner that was randomly selected by the giveaway
+     * @notice Mints the NFT to the winner's address.
+     * @dev This NFT can only be minted once.
+     * @param winner The winner that was randomly selected by the giveaway.
      */
-    function mintReward(address winner) public onlyOwner {
+    function mintReward(address winner) external onlyOwner {
         if (s_tokenCounter != 0) revert RewardMintedGiveawayClosed();
         s_tokenCounter++;
+
         _safeMint(winner, s_tokenCounter);
         _setTokenURI(s_tokenCounter, s_nftUri);
     }
 
     /**
-     * @return The NFT metadata Uri
+     * @return The NFT metadata Uri.
      */
-    function getNftUri() public view returns (string memory) {
+    function getNftUri() external view returns (string memory) {
         return s_nftUri;
     }
 }

@@ -11,9 +11,9 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {RegistrationParams, AutomationRegistrarInterface} from "./AutomationRegistrarInterface.sol";
 
 /**
- * @title A Giveaway smart contract
+ * @title A Giveaway smart contract.
  * @author Sahil Gujrati
- * @notice People can join in to have a fair chance at winning an NFT. The NFT can also represent physical assets such as sneakers, gaming consoles, etc
+ * @notice People can join in to have a fair chance at winning an NFT. The NFT can also represent physical assets such as sneakers, gaming consoles, etc.
  */
 contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     // stores the details of the request that was made to the Chainlink VRF node operators to retrieve a random number for the given requestId
@@ -22,9 +22,7 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
         uint256 randomWord;
     }
 
-    /**
-     * @dev 0 for open state, 1 for the "selecting winner" state, and 2 for the closed state
-     */
+    // 0 for OPEN, 1 for SELECTING_WINNER, and 2 for CLOSED
     enum GiveawayState {
         OPEN,
         SELECTING_WINNER,
@@ -56,21 +54,21 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     LinkTokenInterface private immutable i_linkToken;
 
     /**
-     * @notice Emitted when the giveaway is deployed
+     * @notice Emitted when the giveaway is deployed.
      */
     event GiveawayOpen();
     /**
-     * @notice Emitted when the giveaway's winner is picked
-     * @param winner The giveaway's winner
+     * @notice Emitted when the giveaway's winner is picked.
+     * @param winner The giveaway's winner.
      */
     event GiveawayWinnerSelected(address indexed winner);
     /**
-     * @notice Emitted when the VRF request is made to get the random word
-     * @param requestId The requestId for getting the random word
+     * @notice Emitted when the VRF request is made to get the random word.
+     * @param requestId The requestId for getting the random word.
      */
     event SelectingWinner(uint256 indexed requestId);
     /**
-     * @notice Emitted when the giveaway is closed
+     * @notice Emitted when the giveaway is closed.
      */
     event GiveawayClosed();
 
@@ -84,11 +82,11 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     error Giveaway__FailedToApproveLinkTokensForUpkeep();
 
     /**
-     * @param keyHash The gas lane key hash value, which is the maximum gas price you are willing to pay for a request, in wei
-     * @param callbackGasLimit The amount of gas to use when the fulfillRandomWords function is called to supply a random word to our contract
-     * @param interval The amount of time in seconds after which to randomly pick a winner
-     * @param vrfCoordinatorAddress The vrfCoordinator contract address that is used to make the request for a random word
-     * @param nftMetadataUri The ipfs uri that points to the NFT metadata
+     * @param keyHash The gas lane key hash value, which is the maximum gas price you are willing to pay for a request, in wei.
+     * @param callbackGasLimit The amount of gas to use when the fulfillRandomWords function is called to supply a random word to our contract.
+     * @param interval The amount of time in seconds after which to randomly pick a winner.
+     * @param vrfCoordinatorAddress The vrfCoordinator contract address that is used to make the request for a random word.
+     * @param nftMetadataUri The ipfs uri that points to the NFT metadata.
      */
     constructor(
         bytes32 keyHash,
@@ -121,8 +119,8 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     }
 
     /**
-     * @notice Funds the subscription created by this contract on deployment
-     * @param amount The amount of LINK tokens to fund the subscription with
+     * @notice Funds the subscription created by this contract on deployment.
+     * @param amount The amount of LINK tokens to fund the subscription with.
      */
     function fundSubscription(uint256 amount) external onlyOwner {
         bool success = i_linkToken.transferAndCall(
@@ -134,8 +132,8 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     }
 
     /**
-     * @notice Registers this contract for upkeep
-     * @param amount The amount to fund the upkeep with
+     * @notice Registers this contract for upkeep.
+     * @param amount The amount to fund the upkeep with.
      */
     function registerForUpkeep(uint96 amount) external onlyOwner {
         RegistrationParams memory params = RegistrationParams({
@@ -160,8 +158,8 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     }
 
     /**
-     * @notice A request is made for the random word, and the requst ID is obtained for the same
-     * @dev The performUpkeep is called by the Chainlink automation service when it's time to pick a winner, as told by the checkUpkeep function
+     * @notice A request is made for the random word, and the requst ID is obtained for the same.
+     * @dev The performUpkeep is called by the Chainlink automation service when it's time to pick a winner, as told by the checkUpkeep function.
      */
     function performUpkeep(bytes calldata /* performData */) external override {
         (bool upkeepNeeded, ) = checkUpkeep("");
@@ -181,22 +179,22 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     }
 
     /**
-     * @notice Removes this contract from the consumers list of the subscription created during deployment
+     * @notice Removes this contract from the consumers list of the subscription this contract uses for funding VRF requests.
      */
     function removeGiveawayFromConsumers() external onlyOwner {
         i_vrfCoordinator.removeConsumer(s_subscriptionId, address(this));
     }
 
     /**
-     * @notice Cancels the subscription
+     * @notice Cancels the subscription.
      */
     function cancelSubscription() external onlyOwner {
         i_vrfCoordinator.cancelSubscription(s_subscriptionId, i_giveawayOwner);
     }
 
     /**
-     * @notice Allows the owner to withdraw all the LINK tokens held by this contract
-     * @param to The address wich receives the LINK tokens when this function is called
+     * @notice Allows the owner to withdraw all the LINK tokens held by this contract.
+     * @param to The address wich receives the LINK tokens when this function is called.
      */
     function withdraw(address to) external onlyOwner {
         uint256 balance = i_linkToken.balanceOf(address(this));
@@ -205,9 +203,119 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     }
 
     /**
-     * @notice Checks if the giveaway is open, if it has enough participants, and that, enough time has passed, as indicated by the interval
-     * @dev This function contains the logic that will be executed off-chain to see if performUpkeep should be executed
-     * @return A boolean value indicating whether it's time to select a winner or not
+     * @notice Allows anyone to join the giveaway for free.
+     */
+    function enterGiveaway() external {
+        if (s_giveawayState != GiveawayState.OPEN) revert Giveaway__NotOpen();
+        if (s_participants[msg.sender]) revert Giveaway__AlreadyJoined();
+
+        s_participants[msg.sender] = true;
+        s_participantsArray.push(msg.sender);
+        ++s_participantCount;
+    }
+
+    /**
+     * @notice Returns the giveaway owner's (deployer's) address.
+     */
+    function getGiveawayOwner() external view returns (address) {
+        return i_giveawayOwner;
+    }
+
+    /**
+     * @notice Returns a number indicating the current state of the giveaway.
+     * @dev GiveawayState is an enum where 0 indicates the "open" state, 1 indicates the "selecting winner" state and 2 indicates the "closed" state.
+     */
+    function getGiveawayState() external view returns (GiveawayState) {
+        return s_giveawayState;
+    }
+
+    /**
+     * @notice Returns the number of giveaway participants.
+     */
+    function getParticipantCount() external view returns (uint256) {
+        return s_participantCount;
+    }
+
+    /**
+     * @notice Returns a boolean indicating whether the given address is a participant or not.
+     * @param participant The address whose participation you want to check.
+     */
+    function isParticipant(address participant) external view returns (bool) {
+        return s_participants[participant];
+    }
+
+    /**
+     * @notice Returns the participant's address.
+     * @dev Gets the address of a participant at the specified index in the participants array.
+     * @param index The index at which the participant address is stored.
+     */
+    function getParticipant(uint256 index) external view returns (address) {
+        if (index > s_participantCount - 1) revert Giveaway__IndexOutOfBounds();
+
+        return s_participantsArray[index];
+    }
+
+    /**
+     * @notice Returns the address of the prize NFT.
+     */
+    function getNFTAddress() external view returns (address) {
+        return address(i_prizeNFT);
+    }
+
+    /**
+     * @notice Returns the NFT metadata URI.
+     */
+    function getNFTMetadataUri() external view returns (string memory) {
+        return s_nftMetadataUri;
+    }
+
+    /**
+     * @notice Returns the giveaway winner's address.
+     * @dev The winner is initially address(0), indicating that the giveaway is still open, and that, no winner is selected yet.
+     */
+    function getWinner() external view returns (address) {
+        return s_winner;
+    }
+
+    /**
+     * @notice Returns the time remaining before a winner is picked.
+     */
+    function getRemainingTime() external view returns (uint256) {
+        return i_interval - (block.timestamp - s_lastTimeStamp);
+    }
+
+    /**
+     * @notice Returns the interval (in seconds) after which the giveaway's winner will be selected.
+     */
+    function getInterval() external view returns (uint256) {
+        return i_interval;
+    }
+
+    /**
+     * @notice Returns the subscription ID this contract uses for funding VRF requests.
+     */
+    function getSubscriptionId() external view returns (uint256) {
+        return s_subscriptionId;
+    }
+
+    /**
+     * @notice Returns the VRFRequest struct containing the requestId and the random number.
+     */
+    function getVRFRequestDetails() external view returns (VRFRequest memory) {
+        return s_vrfRequest;
+    }
+
+    /**
+     * @notice Returns the upkeep ID that was given to this contract upon registering for upkeep.
+     */
+    function getUpkeepId() external view returns (uint256) {
+        return i_upkeepId;
+    }
+
+    /**
+     * @notice Checks if the giveaway is open, if it has enough participants, and that, enough time has passed, as indicated by the interval.
+     * @dev This function contains the logic that will be executed off-chain to see if performUpkeep should be executed.
+     * @return A boolean value indicating whether it's time to select a winner or not.
      */
     function checkUpkeep(
         bytes memory /* checkData */
@@ -221,122 +329,9 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
     }
 
     /**
-     * @notice Allows anyone to join the giveaway for free
-     */
-    function enterGiveaway() public {
-        if (s_giveawayState != GiveawayState.OPEN) revert Giveaway__NotOpen();
-        if (isParticipant(msg.sender)) revert Giveaway__AlreadyJoined();
-
-        s_participants[msg.sender] = true;
-        s_participantsArray.push(msg.sender);
-        s_participantCount++;
-    }
-
-    /**
-     * @return The giveaway owner's (deployer's) address
-     */
-    function getGiveawayOwner() public view returns (address) {
-        return i_giveawayOwner;
-    }
-
-    /**
-     * @notice Tells if the giveaway is open or not
-     * @dev GiveawayState is an enum where 0 indicates an open state, 1 indicates the "selecting winner" state and 2 indicates the closed state
-     * @return A number indicating the current state of the giveaway
-     */
-    function getGiveawayState() public view returns (GiveawayState) {
-        return s_giveawayState;
-    }
-
-    /**
-     * @return The number of giveaway participants
-     */
-    function getParticipantCount() public view returns (uint256) {
-        return s_participantCount;
-    }
-
-    /**
-     * @notice Checks if the given address is a participant of the giveaway
-     * @param participant The address whose participation you want to check
-     * @return A boolean indicating whether the given address is a participant or not
-     */
-    function isParticipant(address participant) public view returns (bool) {
-        return s_participants[participant];
-    }
-
-    /**
-     * @dev Gets the address of a participant at the specified index in the participants array
-     * @param index The index at which the participant address is stored
-     * @return The participant's address
-     */
-    function getParticipant(uint256 index) public view returns (address) {
-        if (index > s_participantCount - 1) revert Giveaway__IndexOutOfBounds();
-
-        return s_participantsArray[index];
-    }
-
-    /**
-     * @return The address of the prize NFT
-     */
-    function getNFTAddress() public view returns (address) {
-        return address(i_prizeNFT);
-    }
-
-    /**
-     * @return The NFT metadata URI
-     */
-    function getNFTMetadataUri() public view returns (string memory) {
-        return s_nftMetadataUri;
-    }
-
-    /**
-     * @notice Gets the address of the winner of the giveaway
-     * @dev The winner is initially address(0), indicating that the giveaway is still open, and that, no winner is selected
-     * @return The giveaway winner's address
-     */
-    function getWinner() public view returns (address) {
-        return s_winner;
-    }
-
-    /**
-     * @return The time remaining before a winner is picked
-     */
-    function getRemainingTime() public view returns (uint256) {
-        return i_interval - (block.timestamp - s_lastTimeStamp);
-    }
-
-    /**
-     * @return The interval (in seconds) after which the giveaway's winner will be selected
-     */
-    function getInterval() public view returns (uint256) {
-        return i_interval;
-    }
-
-    /**
-     * @return The subscription ID this contract uses for funding VRF requests
-     */
-    function getSubscriptionId() public view returns (uint256) {
-        return s_subscriptionId;
-    }
-
-    /**
-     * @return The VRFRequest struct containing the requestId and the random number
-     */
-    function getVRFRequestDetails() public view returns (VRFRequest memory) {
-        return s_vrfRequest;
-    }
-
-    /**
-     * @return The upkeep ID that was given to this contract upon registering for upkeep
-     */
-    function getUpkeepId() public view returns (uint256) {
-        return i_upkeepId;
-    }
-
-    /**
-     * @notice A winner is picked using the modulo operation and the NFT is minted to the winner's address. The giveaway is closed
-     * @dev This is the callabck for the vrf request. The vrfCoordinator calls this function, supplying the random number for the requestId
-     * @param randomWords The random numbers supplied to this function by the Chainlink vrf node operators
+     * @notice A winner is picked using the modulo operation and the NFT is minted to the winner's address. The giveaway is closed.
+     * @dev This is the callabck for the vrf request. The vrfCoordinator calls this function, supplying the random number for the requestId.
+     * @param randomWords The random numbers supplied to this function by the Chainlink vrf node operators.
      */
     function fulfillRandomWords(
         uint256 /* _requestId */,
