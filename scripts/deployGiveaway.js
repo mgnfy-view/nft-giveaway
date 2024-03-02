@@ -126,7 +126,7 @@ const deployGiveaway = async function () {
             networkConfig[network.config.chainId]?.fundLinkAmountForUpkeep ??
                 ethers.parseEther("3"),
         );
-        console.log("registered for upkeep");
+        console.log("Registered for upkeep");
 
         if (process.env.ETHERSCAN_API_KEY) {
             await verify(await giveaway.getAddress(), constructorArgs);

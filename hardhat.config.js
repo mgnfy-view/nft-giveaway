@@ -6,7 +6,7 @@ require("dotenv").config();
 const cleanup = require("./tasks/cleanup/cleanup.js");
 
 task(
-    "Cleanup",
+    "cleanup",
     "Remove giveaway from consumers, cancel subscription and withdraw any remaining LINK that the contract holds",
 )
     .addParam("address", "The address of the deployed giveaway contract")
