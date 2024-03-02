@@ -32,8 +32,8 @@ contract PrizeNFT is ERC721URIStorage, Ownable {
         if (s_tokenCounter != 0) revert RewardMintedGiveawayClosed();
         s_tokenCounter++;
 
-        _safeMint(winner, s_tokenCounter);
         _setTokenURI(s_tokenCounter, s_nftUri);
+        _safeMint(winner, s_tokenCounter);
     }
 
     /**

@@ -8,7 +8,7 @@ import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/autom
 import {PrizeNFT} from "./PrizeNFT.sol";
 import {LinkTokenInterface} from "@chainlink/contracts/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {RegistrationParams, AutomationRegistrarInterface} from "./AutomationRegistrarInterface.sol";
+import {RegistrationParams, AutomationRegistrarInterface} from "./IAutomationRegistrar.sol";
 
 /**
  * @title A Giveaway smart contract.
@@ -112,10 +112,10 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
         i_prizeNFT = new PrizeNFT(nftMetadataUri);
         i_linkToken = LinkTokenInterface(linkTokenAddress);
 
+        emit GiveawayOpen();
+
         s_subscriptionId = i_vrfCoordinator.createSubscription();
         i_vrfCoordinator.addConsumer(s_subscriptionId, address(this));
-
-        emit GiveawayOpen();
     }
 
     /**
@@ -341,9 +341,10 @@ contract Giveaway is VRFConsumerBaseV2, AutomationCompatibleInterface, Ownable {
         s_vrfRequest.randomWord = randomWords[0];
 
         s_winner = s_participantsArray[randomWords[0] % s_participantCount];
-        i_prizeNFT.mintReward(s_winner);
 
         emit GiveawayWinnerSelected(s_winner);
         emit GiveawayClosed();
+
+        i_prizeNFT.mintReward(s_winner);
     }
 }
