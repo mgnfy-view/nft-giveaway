@@ -142,7 +142,7 @@ That's it. The giveaway should be up and running, and people can join in! Wait t
 After the giveaway has ended, you can use the removeGiveawayFromConsumers(), cancelSubscription(), and withdraw() methods to clean up and claim the unused LINK tokens. You can use the cleanup task for that:
 
 ```shell
-npx hardhat Cleanup --address "YOUR_DEPLOYED_GIVEAWAY'S_ADDRESS" --network <network-name>
+npx hardhat cleanup --address "YOUR_DEPLOYED_GIVEAWAY'S_ADDRESS" --network <network-name>
 ```
 
 
