@@ -101,28 +101,31 @@ npm install
 
 ### Setup, Deployment and Cleanup
 
-Depending on the network you want to deploy the giveaway to (I highly advise against deploying on mainnet), you'll need the following values:
+> [!WARNING]
+> The contracts haven't been audited yet, so please keep your deployments restricted to testnets only!
 
-- RPC URL: you can get this from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/) for any of your preferred chain
-- Private key for one of your accounts: create your MetaMask wallet and get your private key from there. This private key will be used to deploy the contract and fund it with LINK tokens. Ensure that it has enough ETH and LINK tokens
-- NFT metadata hash: you'll need to upload your NFT metadata to IPFS and get its hash
-- Etherscan and CoinMarketCap api keys: optionally, you can get the [etherscan api key](https://docs.etherscan.io/getting-started/creating-an-account) and [coinmarketcap api key](https://coinmarketcap.com/api/). The former will let you verify contracts on etherscan, and the latter will provide you with gas reports with gas consumed mentioned in your preferred currency that you may set in the `hardhat.config.js` file's gasReport section.
+Depending on the test network you want to deploy the giveaway to, you'll need the following values:
+
+- **RPC URL**: you can get this from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/) for any of your preferred chain
+- **Private key for one of your accounts**: create your MetaMask wallet and get your private key from there. This private key will be used to deploy the contract and fund it with LINK tokens. Ensure that it has enough ETH and LINK tokens
+- **NFT metadata hash**: you'll need to upload your NFT metadata to IPFS and get its hash
+- **Etherscan and CoinMarketCap api keys**: optionally, you can get the [etherscan api key](https://docs.etherscan.io/getting-started/creating-an-account) and [coinmarketcap api key](https://coinmarketcap.com/api/). The former will let you verify contracts on etherscan, and the latter will provide you with gas reports with gas consumed mentioned in your preferred currency that you may set in the `hardhat.config.js` file's gasReport section.
 
 Set these values correctly in the `.env.example` file in the top level of the project, and rename the file to `.env`, and bring them in your `hardhat.config.js` file. An example configuration for the Sepolia testnet is given in the same file.
 
 You'll also need to configure the `helper.config.js` file. Make sure you have the ID of the chain you're deploying to.
 In the networkConfig object in `helper.config.js`, add the blockchain's ID as the key, and add the object containing configuration details as the value. You'll need:
 
-- name: name of the chain
-- blockConfirmations: the number of blocks you want to wait during deployment (6 is generally a good number)
-- keyHash: the amount of gas you want to spend on each random word request
-- callbackGasLimit: the maximum gas limit for fulfillRandomWords function
-- interval: the time in seconds after which to pick a winner
-- vrfCoordinatorAddress: the address of Chainlink's VRFCoordinator for your preferred chain
-- linkTokenAddress: the address of the LINK token contract for your preferred chain
-- upkeepContractAddress: the address of the Chainlink registrar for your preferred chain
-- fundLinkAmountForSubscription: the amount of LINK tokens to fund the subscription ID which is dynamically created by the contract on deployment
-- fundLinkAmountForUpkeep: the amount of LINK tokens to fund the upkeep
+- **name**: name of the chain
+- **blockConfirmations**: the number of blocks you want to wait during deployment (6 is generally a good number)
+- **keyHash**: the amount of gas you want to spend on each random word request
+- **callbackGasLimit**: the maximum gas limit for fulfillRandomWords function
+- **interval**: the time in seconds after which to pick a winner
+- **vrfCoordinatorAddress**: the address of Chainlink's VRFCoordinator for your preferred chain
+- **linkTokenAddress**: the address of the LINK token contract for your preferred chain
+- **upkeepContractAddress**: the address of the Chainlink registrar for your preferred chain
+- **fundLinkAmountForSubscription**: the amount of LINK tokens to fund the subscription ID which is dynamically created by the contract on deployment
+- **fundLinkAmountForUpkeep**: the amount of LINK tokens to fund the upkeep
 
 An example configuration for the Sepolia testnet (ID: 11155111) is given in the `helper.config.js` file. You can get more details about these values at [Chainlink VRF docs](https://docs.chain.link/vrf) and [Chainlink Automation docs](https://docs.chain.link/chainlink-automation).
 
