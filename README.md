@@ -89,7 +89,7 @@ Make sure you have node.js and git installed and configured on your system. Also
 Clone this repository
 
 ```shell
-git clone https://github.com/Sahil-Gujrati/nft-giveaway.git
+git clone https://github.com/mgnfy-view/nft-giveaway.git
 ```
 
 Cd into the project folder and install the dependencies
