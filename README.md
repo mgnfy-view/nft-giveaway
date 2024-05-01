@@ -177,10 +177,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 
-## Contact
+## Reach Out
 
-Sahil Gujrati - [@twitter_handle](https://twitter.com/Sahil__Gujrati) - sahilgujrati12@gmail.com
-
+[Linktree](mgnfy-view/thunder-swap-client) - a gateway to my socials.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
